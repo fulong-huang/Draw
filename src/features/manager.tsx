@@ -1,13 +1,14 @@
+import Shape from './display/shape/Shape.tsx'
 import Rectangle from './display/shape/Rectangle.tsx'
-import {CanvasClass} from './display/canvas/canvas.tsx'
+import { CanvasClass } from './display/canvas/canvas.tsx'
 
-export default class Manager{
-  constructor(){
-    this.elements = [];
-    this.canvas = null;
+export default class Manager {
+  private elements: Array<Shape> = [];
+  private canvas!: CanvasClass;
+  constructor() {
   }
 
-  init(){
+  init() {
     console.log("INIT MANAGER");
     this.canvas = new CanvasClass();
 
@@ -16,19 +17,19 @@ export default class Manager{
     this.resize(width, height);
   }
 
-  resize(width, height){
+  resize(width: number, height: number) {
     this.canvas.resize(width, height);
     this.canvas.draw(this.elements);
   }
 
-  addShape(w, h){
-    const newRect = new Rectangle(this.elements.length*10, this.elements.length*10, w, h);
-    if(this.elements.length >= 5){
+  addShape(w: number, h: number) {
+    const newRect = new Rectangle(this.elements.length * 10, this.elements.length * 10, w, h);
+    if (this.elements.length >= 5) {
       const ele = this.elements
       ele.shift()
       this.elements = ([...ele, newRect]);
     }
-    else{
+    else {
       this.elements = ([...this.elements, newRect]);
     }
     this.canvas.draw(this.elements);

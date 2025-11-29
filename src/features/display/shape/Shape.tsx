@@ -1,0 +1,14 @@
+export default class Shape {
+  x: number;
+  y: number;
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+  draw(ctx: CanvasRenderingContext2D) {
+    console.log("Shape draw called")
+    ctx.fillStyle = 'red';
+    ctx.strokeRect(this.x, this.y, 500, 500);
+  }
+}
+

@@ -1,33 +1,25 @@
-import React, { useEffect, useState} from 'react';
-
+import Shape from '../shape/Shape.tsx'
 import './canvas.css'
 
-export class CanvasClass{
-  constructor(){
-    console.log("INIT CANVAS");
-    this.canvas = document.getElementById("canvas");
-    this.ctx = canvas.getContext('2d');
-    this.x = 0;
-    this.y = 0;
-  }
-  resize(width, height){
+export class CanvasClass {
+  private canvas: HTMLCanvasElement = document.getElementById("canvas")! as HTMLCanvasElement;
+  private ctx: CanvasRenderingContext2D = this.canvas.getContext('2d')!;
+  resize(width: number, height: number) {
     this.canvas.style.width = width + 'px';
     this.canvas.style.height = height + 'px';
     this.canvas.width = width;
     this.canvas.height = height;
   }
-  getContext(ct){
-    return this.canvas.getContext(ct);
-  }
-  draw(elements){
-    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for(let i = 0; i < elements.length; i++){
+
+  draw(elements: Shape[]) {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    for (let i = 0; i < elements.length; i++) {
       elements[i].draw(this.ctx);
     }
   }
 }
 
-export default function Canvas(){
+export default function Canvas() {
 
   return (
     <>
