@@ -1,18 +1,7 @@
-class Rectangle{
-  constructor(x, y, w, h){
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-  }
-  draw(ctx){
-    ctx.fillStyle='green';
-    ctx.fillRect(this.x, this.y, this.w, this.h);
-  }
-};
+import Rectangle from './shape/Rectangle.tsx'
 
 export default class Manager{
-  defineElements(elements, setElements){
+  constructor(elements, setElements){
     this.elements = elements;
     this.setElements = setElements;
   }
