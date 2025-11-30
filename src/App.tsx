@@ -1,12 +1,28 @@
+import { useEffect } from 'react'
 import './App.css'
-import Canvas from './features/display/canvas/canvas.tsx'
-import Manager from './features/manager.tsx'
+import Manager, { MANAGER } from './features/manager.tsx'
+import Canvas, { CANVAS } from './features/display/canvas/canvas.tsx'
 
 function App() {
+  useEffect(() => {
+    CANVAS.init();
+    MANAGER.setCanvas(CANVAS);
+    function handleResize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      MANAGER.canvas.resize(width, height);
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize()
+    return () => {
+      MANAGER.cleanUp();
+      window.removeEventListener('resize', handleResize);
+    }
+  }, [])
   return (
     <>
       <Manager />
-      <Canvas />
+      {<Canvas />}
     </>
   )
 }
