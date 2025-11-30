@@ -15,7 +15,10 @@ function App() {
     }
     window.addEventListener('resize', handleResize);
     handleResize()
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      MANAGER.cleanUp();
+      window.removeEventListener('resize', handleResize);
+    }
   }, [])
   return (
     <>

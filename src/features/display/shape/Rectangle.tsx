@@ -1,27 +1,38 @@
 import Shape from './Shape.tsx'
 export default class Rectangle extends Shape {
-  w: number;
-  h: number;
+  width: number;
+  height: number;
   color: string;
   stroke: boolean;
-  width: number;
-  constructor(x: number, y: number, w = 50, h = 20, color = 'black', stroke = true, width = 1) {
+  lineWidth: number;
+  constructor(x: number, y: number, width = 50, height = 20, color = 'black', stroke = true, lineWidth = 1) {
     super(x, y);
-    this.w = w;
-    this.h = h;
+    this.width = width;
+    this.height = height;
     this.color = color;
     this.stroke = stroke;
+    this.lineWidth = lineWidth;
+  }
+  rectExist() {
+    return this.width != 0 && this.height != 0;
+  }
+  setDiagonal(x2: number, y2: number) {
+    this.width = x2 - this.x;
+    this.height = y2 - this.y;
+  }
+  changeDimension(width: number, height: number) {
     this.width = width;
+    this.height = height;
   }
   draw(ctx: CanvasRenderingContext2D) {
     if (this.stroke) {
       ctx.strokeStyle = this.color;
-      ctx.lineWidth = this.width;
-      ctx.strokeRect(this.x, this.y, this.w, this.h);
+      ctx.lineWidth = this.lineWidth;
+      ctx.strokeRect(this.x, this.y, this.width, this.height);
     }
     else {
       ctx.fillStyle = this.color;
-      ctx.fillRect(this.x, this.y, this.w, this.h);
+      ctx.fillRect(this.x, this.y, this.width, this.height);
     }
   }
 };

@@ -27,9 +27,17 @@ export class CanvasClass {
   getCanvas() {
     return this.canvas;
   }
+  addEventListener(eventType: string, handler: (event: MouseEvent) => void) {
+    this.canvas.addEventListener(eventType, handler as EventListenerOrEventListenerObject)
+  }
 
-  draw(elements: Shape[]) {
+  clear() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+  draw(elements: Shape) {
+    elements.draw(this.ctx);
+  }
+  drawElements(elements: Shape[]) {
     for (let i = 0; i < elements.length; i++) {
       elements[i].draw(this.ctx);
     }

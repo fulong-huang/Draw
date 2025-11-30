@@ -1,33 +1,37 @@
 import Shape from './Shape.tsx'
 export default class Line extends Shape {
-  points: number[] = []
-  width: number;
+  x2: number;
+  y2: number
+  lineWidth: number;
   color: string;
-  constructor(x: number, y: number, points: number[],
-    width: number = 5, color = 'white') {
+  constructor(x: number, y: number, x2: number, y2: number,
+    lineWidth: number = 5, color = 'white') {
+    console.log("constructor", x, y)
     super(x, y);
-    this.points = points;
-    this.width = width;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.lineWidth = lineWidth;
     this.color = color;
   }
-  addPoint(x: number, y: number) {
-    this.points.push(x);
-    this.points.push(y);
+  lineExist() {
+    return this.x != this.x2, this.y != this.y2
+  }
+  movePoint2(x2: number, y2: number) {
+    this.x2 = x2
+    this.y2 = y2
   }
   setColor(color: string) {
     this.color = color;
   }
-  setLineWidth(width: number) {
-    this.width = width;
+  setLineWidth(lineWidth: number) {
+    this.lineWidth = lineWidth;
   }
   draw(ctx: CanvasRenderingContext2D) {
     ctx.strokeStyle = this.color;
+    ctx.lineWidth = this.lineWidth;
     ctx.beginPath();
     ctx.moveTo(this.x, this.y);
-    for (let i = 0; i < this.points.length; i += 2) {
-      ctx.lineTo(this.points[i], this.points[i + 1]);
-    }
-    ctx.lineWidth = this.width;
+    ctx.lineTo(this.x2, this.y2);
     ctx.stroke();
   }
 };
