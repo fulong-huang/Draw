@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Shape from './display/shape/Shape.tsx'
 import Rectangle from './display/shape/Rectangle.tsx'
 import Line from './display/shape/Line.tsx'
 import Sketch from './display/shape/Sketch.tsx'
 import { CanvasClass } from './display/canvas/canvas.tsx'
+import './manager.css'
 
 class ManagerClass {
   sk: Sketch = new Sketch(500, 500);
@@ -12,7 +13,7 @@ class ManagerClass {
   isMouseDown: boolean = false;
   backTrack = 0;
   currShape?: Sketch | Line | Rectangle;
-  selectedShape: typeof Sketch | typeof Rectangle | typeof Line = Line;
+  selectedShape: typeof Sketch | typeof Rectangle | typeof Line = Sketch;
 
   mouseDownHandler = (e: MouseEvent) => this.handleMouseDown(e);
   mouseUpHandler = () => this.handleMouseUp();
@@ -20,7 +21,33 @@ class ManagerClass {
 
   constructor() {
   }
-
+  setSelectedTool(toolSelected: number) {
+    if (toolSelected == 0) {
+      this.selectedShape = Sketch
+    }
+    else if (toolSelected == 1) {
+      this.selectedShape = Line
+    }
+    else if (toolSelected == 2) {
+      this.selectedShape = Rectangle
+    }
+    else {
+      // TODO:
+      // User not drawing
+    }
+  }
+  getSelectedTool() {
+    if (this.selectedShape instanceof Sketch) {
+      return 0
+    }
+    else if (this.selectedShape instanceof Line) {
+      return 1
+    }
+    else if (this.selectedShape instanceof Rectangle) {
+      return 2
+    }
+    return -1
+  }
   init() {
     this.canvas = new CanvasClass();
     const drawingCanvas = this.canvas.getCanvas();
@@ -124,7 +151,7 @@ class ManagerClass {
 
 const MANAGER = new ManagerClass();
 export default function Manager() {
-
+  const [selectedTool, setSelectedTool] = useState(0);
   useEffect(() => {
     MANAGER.init();
     function handleResize() {
@@ -140,8 +167,53 @@ export default function Manager() {
     }
   }, [])
   return (
-    <>
-    </>
+    <div className='managerContainer'>
+      <div className='toolList'>
+        <div className={
+          selectedTool == 0 ?
+            'toolSelector selectedTool' :
+            'toolSelector'
+        }
+          onClick={
+            () => {
+              MANAGER.setSelectedTool(0)
+              setSelectedTool(0)
+            }
+          }
+        >
+          Sketch
+        </div>
+        <div className={
+          selectedTool == 1 ?
+            'toolSelector selectedTool' :
+            'toolSelector'
+        }
+          onClick={
+            () => {
+              MANAGER.setSelectedTool(1)
+              setSelectedTool(1)
+            }
+          }
+        >
+          Line
+        </div>
+        <div className={
+          selectedTool == 2 ?
+            'toolSelector selectedTool' :
+            'toolSelector'
+        }
+          onClick={
+            () => {
+              MANAGER.setSelectedTool(2)
+              setSelectedTool(2)
+            }
+          }
+        >
+          Rectangle
+
+        </div>
+      </div>
+    </div>
   )
 }
 
