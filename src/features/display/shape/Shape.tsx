@@ -6,7 +6,6 @@ export default class Shape {
     this.y = y;
   }
   draw(ctx: CanvasRenderingContext2D) {
-    console.log("Shape draw called")
     ctx.fillStyle = 'red';
     ctx.strokeRect(this.x, this.y, 500, 500);
   }

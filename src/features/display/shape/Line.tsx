@@ -6,7 +6,6 @@ export default class Line extends Shape {
   color: string;
   constructor(x: number, y: number, x2: number, y2: number,
     lineWidth: number = 5, color = 'white') {
-    console.log("constructor", x, y)
     super(x, y);
     this.x2 = x2;
     this.y2 = y2;

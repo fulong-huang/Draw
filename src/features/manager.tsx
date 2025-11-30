@@ -1,10 +1,11 @@
+import { useEffect } from 'react'
 import Shape from './display/shape/Shape.tsx'
 import Rectangle from './display/shape/Rectangle.tsx'
 import Line from './display/shape/Line.tsx'
 import Sketch from './display/shape/Sketch.tsx'
 import { CanvasClass } from './display/canvas/canvas.tsx'
 
-export default class Manager {
+class ManagerClass {
   sk: Sketch = new Sketch(500, 500);
   elements: Array<Shape> = [this.sk];
   canvas!: CanvasClass;
@@ -21,7 +22,6 @@ export default class Manager {
   }
 
   init() {
-    console.log("init")
     this.canvas = new CanvasClass();
     const drawingCanvas = this.canvas.getCanvas();
     drawingCanvas.addEventListener(
@@ -39,7 +39,6 @@ export default class Manager {
   }
 
   cleanUp() {
-    console.log("cleanup")
     const drawingCanvas = this.canvas.getCanvas();
     drawingCanvas.removeEventListener(
       'mousedown', this.mouseDownHandler
@@ -76,13 +75,12 @@ export default class Manager {
 
   }
   handleMouseDown(event: MouseEvent) {
-    console.log("HANDLE MOUSE DOWN")
+    if (this.isMouseDown) return
     this.isMouseDown = true;
     if (this.selectedShape == Sketch) {
       this.currShape = new Sketch(event.offsetX, event.offsetY);
     }
     else if (this.selectedShape == Rectangle) {
-      console.log(this.selectedShape)
       this.currShape = new Rectangle(
         event.offsetX, event.offsetY, 0, 0
       );
@@ -96,7 +94,6 @@ export default class Manager {
     }
   }
   handleMouseUp() {
-    console.log("HANDLE MOUSE UP")
     this.isMouseDown = false;
     if (this.currShape instanceof Sketch) {
       this.elements.push(this.currShape)
@@ -115,7 +112,6 @@ export default class Manager {
       // TODO: 
       // displace image
     }
-    console.log(this.elements)
     this.updateCanvas();
   }
 
@@ -124,13 +120,28 @@ export default class Manager {
     this.updateCanvas();
   }
 
-  addShape(w: number, h: number) {
-    const newRect = new Rectangle(this.elements.length * 10, this.elements.length * 10, w, h);
-    this.elements.push(newRect);
+}
 
-    this.sk.addPoint(280 * this.elements.length % 138, 250 * this.elements.length % 368)
+const MANAGER = new ManagerClass();
+export default function Manager() {
 
-    this.updateCanvas();
-  }
+  useEffect(() => {
+    MANAGER.init();
+    function handleResize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      MANAGER.resize(width, height);
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize()
+    return () => {
+      MANAGER.cleanUp();
+      window.removeEventListener('resize', handleResize);
+    }
+  }, [])
+  return (
+    <>
+    </>
+  )
 }
 
