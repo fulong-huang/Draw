@@ -4,11 +4,25 @@ import './canvas.css'
 export class CanvasClass {
   private canvas: HTMLCanvasElement = document.getElementById("canvas")! as HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D = this.canvas.getContext('2d')!;
+  private width: number = 0;
+  private height: number = 0;
   resize(width: number, height: number) {
     this.canvas.style.width = width + 'px';
     this.canvas.style.height = height + 'px';
     this.canvas.width = width;
     this.canvas.height = height;
+    this.width = width;
+    this.height = height;
+  }
+
+  getWidth() {
+    return this.width;
+  }
+  getHeight() {
+    return this.height;
+  }
+  getContext() {
+    return this.ctx;
   }
 
   draw(elements: Shape[]) {
