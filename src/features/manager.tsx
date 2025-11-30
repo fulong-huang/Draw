@@ -7,6 +7,9 @@ import { CanvasClass } from './display/canvas/canvas.tsx'
 import './manager.css'
 
 class ManagerClass {
+  scaleAmount: number = 1.1;
+  currScale: number = 1;
+
   sk: Sketch = new Sketch(500, 500);
   elements: Array<Shape> = [this.sk];
   canvas!: CanvasClass;
@@ -19,7 +22,19 @@ class ManagerClass {
   mouseUpHandler = () => this.handleMouseUp();
   mouseMoveHandler = (e: MouseEvent) => this.handleMouseMovement(e);
 
+  wheelScrollHandler = (e: WheelEvent) => this.handleWheelScroll(e);
+
   constructor() {
+  }
+
+  handleWheelScroll(event: WheelEvent) {
+    if (event.deltaY > 0)
+      this.currScale *= this.scaleAmount;
+    else if (event.deltaY < 0)
+      this.currScale /= this.scaleAmount;
+    this.canvas.zoom(event.offsetX, event.offsetY, this.currScale)
+
+    this.updateCanvas();
   }
   setSelectedTool(toolSelected: number) {
     if (toolSelected == 0) {
@@ -49,6 +64,9 @@ class ManagerClass {
     return -1
   }
   init() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
     this.canvas = new CanvasClass();
     const drawingCanvas = this.canvas.getCanvas();
     drawingCanvas.addEventListener(
@@ -60,8 +78,10 @@ class ManagerClass {
     drawingCanvas.addEventListener(
       'mousemove', this.mouseMoveHandler
     )
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+
+    drawingCanvas.addEventListener(
+      'wheel', this.wheelScrollHandler
+    )
     this.resize(width, height);
   }
 
@@ -168,6 +188,16 @@ export default function Manager() {
   }, [])
   return (
     <div className='managerContainer'>
+
+      <div
+        className='test'
+        onClick={() => {
+
+        }}
+      >
+        test
+      </div>
+
       <div className='toolList'>
         <div className={
           selectedTool == 0 ?

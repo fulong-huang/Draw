@@ -5,9 +5,11 @@ export default class Shape {
     this.x = x;
     this.y = y;
   }
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D,
+    scale: number,
+  ) {
     ctx.fillStyle = 'red';
-    ctx.strokeRect(this.x, this.y, 500, 500);
+    ctx.strokeRect(this.x, this.y, 500 * scale, 500 * scale);
   }
 }
 

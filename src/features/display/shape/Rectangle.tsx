@@ -24,15 +24,21 @@ export default class Rectangle extends Shape {
     this.width = width;
     this.height = height;
   }
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, scale: number) {
     if (this.stroke) {
       ctx.strokeStyle = this.color;
       ctx.lineWidth = this.lineWidth;
-      ctx.strokeRect(this.x, this.y, this.width, this.height);
+      ctx.strokeRect(
+        this.x * scale, this.y * scale,
+        this.width * scale, this.height * scale
+      );
     }
     else {
       ctx.fillStyle = this.color;
-      ctx.fillRect(this.x, this.y, this.width, this.height);
+      ctx.fillRect(
+        this.x * scale, this.y * scale,
+        this.width * scale, this.height * scale
+      );
     }
   }
 };

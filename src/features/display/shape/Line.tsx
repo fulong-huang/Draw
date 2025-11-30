@@ -25,12 +25,12 @@ export default class Line extends Shape {
   setLineWidth(lineWidth: number) {
     this.lineWidth = lineWidth;
   }
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, scale: number) {
     ctx.strokeStyle = this.color;
     ctx.lineWidth = this.lineWidth;
     ctx.beginPath();
-    ctx.moveTo(this.x, this.y);
-    ctx.lineTo(this.x2, this.y2);
+    ctx.moveTo(this.x * scale, this.y * scale);
+    ctx.lineTo(this.x2 * scale, this.y2 * scale);
     ctx.stroke();
   }
 };
