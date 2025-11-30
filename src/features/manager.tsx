@@ -8,6 +8,7 @@ export default class Manager {
   private sk: Sketch = new Sketch(500, 500);
   private elements: Array<Shape> = [this.sk];
   private canvas!: CanvasClass;
+  private isMouseDown: boolean = false;
 
   constructor() {
   }
@@ -15,10 +16,25 @@ export default class Manager {
   init() {
     console.log("INIT MANAGER");
     this.canvas = new CanvasClass();
-
+    this.canvas.getCanvas().addEventListener('mousedown', this.handleMouseDown)
+    this.canvas.getCanvas().addEventListener('mouseup', this.handleMouseUp)
+    this.canvas.getCanvas().addEventListener('mousemove', this.handleMouseMovement)
     const width = window.innerWidth;
     const height = window.innerHeight;
     this.resize(width, height);
+  }
+
+  handleMouseMovement(event: MouseEvent) {
+    if (!this.isMouseDown) return
+    console.log(event);
+  }
+  handleMouseDown(event: MouseEvent) {
+    this.isMouseDown = true;
+    console.log(event);
+  }
+  handleMouseUp(event: MouseEvent) {
+    this.isMouseDown = false;
+    console.log(event);
   }
 
   resize(width: number, height: number) {

@@ -24,6 +24,9 @@ export class CanvasClass {
   getContext() {
     return this.ctx;
   }
+  getCanvas() {
+    return this.canvas;
+  }
 
   draw(elements: Shape[]) {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
