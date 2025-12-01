@@ -27,7 +27,7 @@ export default class Line extends Shape {
   }
   draw(ctx: CanvasRenderingContext2D, scale: number) {
     ctx.strokeStyle = this.color;
-    ctx.lineWidth = this.lineWidth;
+    ctx.lineWidth = this.lineWidth * scale;
     ctx.beginPath();
     ctx.moveTo(this.x * scale, this.y * scale);
     ctx.lineTo(this.x2 * scale, this.y2 * scale);

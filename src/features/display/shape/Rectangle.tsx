@@ -27,7 +27,7 @@ export default class Rectangle extends Shape {
   draw(ctx: CanvasRenderingContext2D, scale: number) {
     if (this.stroke) {
       ctx.strokeStyle = this.color;
-      ctx.lineWidth = this.lineWidth;
+      ctx.lineWidth = this.lineWidth * scale;
       ctx.strokeRect(
         this.x * scale, this.y * scale,
         this.width * scale, this.height * scale

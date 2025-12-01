@@ -92,14 +92,18 @@ export class CanvasClass {
 
   handleMouseMovement(event: MouseEvent) {
     if (!this.isMouseDown) return
+    let mousePosX = event.offsetX;
+    let mousePosY = event.offsetY;
+    mousePosX /= this.currScale;
+    mousePosY /= this.currScale;
     if (this.currShape instanceof Sketch) {
-      this.currShape.addPoint(event.offsetX, event.offsetY)
+      this.currShape.addPoint(mousePosX, mousePosY)
     }
     else if (this.currShape instanceof Rectangle) {
-      this.currShape.setDiagonal(event.offsetX, event.offsetY)
+      this.currShape.setDiagonal(mousePosX, mousePosY)
     }
     else if (this.currShape instanceof Line) {
-      this.currShape.movePoint2(event.offsetX, event.offsetY)
+      this.currShape.movePoint2(mousePosX, mousePosY)
     }
     else {
       console.log("else")
@@ -110,16 +114,20 @@ export class CanvasClass {
   handleMouseDown(event: MouseEvent) {
     if (this.isMouseDown) return
     this.isMouseDown = true;
+    let mousePosX = event.offsetX;
+    let mousePosY = event.offsetY;
+    mousePosX /= this.currScale;
+    mousePosY /= this.currScale;
     if (this.selectedShape == Sketch) {
-      this.currShape = new Sketch(event.offsetX, event.offsetY);
+      this.currShape = new Sketch(mousePosX, mousePosY);
     }
     else if (this.selectedShape == Rectangle) {
       this.currShape = new Rectangle(
-        event.offsetX, event.offsetY, 0, 0
+        mousePosX, mousePosY, 0, 0
       );
     }
     else if (this.selectedShape == Line) {
-      this.currShape = new Line(event.offsetX, event.offsetY, event.offsetX, event.offsetY);
+      this.currShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY);
     }
     else {
       // TODO: 
@@ -149,9 +157,9 @@ export class CanvasClass {
   }
 
   handleWheelScroll(event: WheelEvent) {
-    if (event.deltaY > 0)
+    if (event.deltaY < 0)
       this.currScale *= this.scaleAmount;
-    else if (event.deltaY < 0)
+    else if (event.deltaY > 0)
       this.currScale /= this.scaleAmount;
     this.zoom(event.offsetX, event.offsetY, this.currScale)
 
