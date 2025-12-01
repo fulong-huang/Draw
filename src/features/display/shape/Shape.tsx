@@ -6,10 +6,15 @@ export default class Shape {
     this.y = y;
   }
   draw(ctx: CanvasRenderingContext2D,
+    shiftedAmount: [number, number],
     scale: number,
   ) {
-    ctx.fillStyle = 'red';
-    ctx.strokeRect(this.x, this.y, 500 * scale, 500 * scale);
+    const x = (this.x + shiftedAmount[0]) * scale;
+    const y = (this.y + shiftedAmount[1]) * scale;
+    const width = 500 * scale;
+    const height = 500 * scale;
+    ctx.strokeStyle = 'red';
+    ctx.strokeRect(x, y, width, height);
   }
 }
 

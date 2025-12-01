@@ -24,21 +24,19 @@ export default class Rectangle extends Shape {
     this.width = width;
     this.height = height;
   }
-  draw(ctx: CanvasRenderingContext2D, scale: number) {
+  draw(ctx: CanvasRenderingContext2D, shifted: [number, number], scale: number) {
+    const x = (this.x + shifted[0]) * scale;
+    const y = (this.y + shifted[1]) * scale;
+    const width = this.width * scale;
+    const height = this.height * scale;
     if (this.stroke) {
       ctx.strokeStyle = this.color;
       ctx.lineWidth = this.lineWidth * scale;
-      ctx.strokeRect(
-        this.x * scale, this.y * scale,
-        this.width * scale, this.height * scale
-      );
+      ctx.strokeRect(x, y, width, height);
     }
     else {
       ctx.fillStyle = this.color;
-      ctx.fillRect(
-        this.x * scale, this.y * scale,
-        this.width * scale, this.height * scale
-      );
+      ctx.fillRect(x, y, width, height);
     }
   }
 };

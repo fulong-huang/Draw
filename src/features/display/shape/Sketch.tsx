@@ -14,18 +14,21 @@ export default class Sketch extends Shape {
     this.points.push(y);
   }
 
-  draw(ctx: CanvasRenderingContext2D, scale: number) {
+  draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
     ctx.strokeStyle = this.color;
     ctx.lineWidth = this.lineWidth * scale;
     ctx.beginPath();
-    ctx.moveTo(this.x * scale, this.y * scale);
+    const x = (this.x - shiftedAmount[0]) * scale
+    const y = (this.y - shiftedAmount[1]) * scale
+    ctx.moveTo(x, y);
     if (this.points.length == 0) {
-      ctx.lineTo(this.x * scale, this.y * scale);
-
+      ctx.lineTo(x, y);
     }
     else {
       for (let i = 0; i < this.points.length; i += 2) {
-        ctx.lineTo(this.points[i] * scale, this.points[i + 1] * scale);
+        const x2 = (this.points[i] - shiftedAmount[0]) * scale
+        const y2 = (this.points[i + 1] - shiftedAmount[1]) * scale
+        ctx.lineTo(x2, y2);
       }
     }
     ctx.stroke();

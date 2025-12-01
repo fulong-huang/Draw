@@ -8,8 +8,8 @@ import './canvas.css'
 export class CanvasClass {
   scaleAmount: number = 1.1;
   currScale: number = 1;
-  // board position indicated how much canvas have shifted 
-  boardPosition: [number, number] = [0, 0];
+  shiftedAmount: [number, number] = [0, 0];
+
   canvas!: HTMLCanvasElement;
   // = document.getElementById("canvas")! as HTMLCanvasElement;
   ctx!: CanvasRenderingContext2D;
@@ -157,13 +157,12 @@ export class CanvasClass {
   }
 
   handleWheelScroll(event: WheelEvent) {
+    let scale: number;
     if (event.deltaY < 0)
-      this.currScale *= this.scaleAmount;
-    else if (event.deltaY > 0)
-      this.currScale /= this.scaleAmount;
-    this.zoom(event.offsetX, event.offsetY, this.currScale)
-
-    this.updateCanvas();
+      scale = this.currScale * this.scaleAmount;
+    else
+      scale = this.currScale / this.scaleAmount;
+    this.zoom(event.offsetX, event.offsetY, scale)
   }
   setSelectedTool(toolSelected: number) {
     if (toolSelected == 0) {
@@ -197,23 +196,39 @@ export class CanvasClass {
     return this.canvas;
   }
 
-  zoom(x: number, y: number, currScale: number) {
+  resetZoom() {
+    // TODO:
+    // Elements should still be shifted, 
+    // reset scale to 1 and change to appropriate values
+    this.shiftedAmount = [0, 0];
+
+    this.currScale = 1;
+    this.updateCanvas();
+  }
+  zoom(x: number, y: number, newScale: number) {
     // Customize zooming and shifting 
     //  to change each element's position
     // this.ctx.setTransform(scaleBy, 0, 0, scaleBy, x, y);
-    console.log(x, y);
-    this.currScale = currScale;
+    const actualX = x / this.currScale + this.shiftedAmount[0];
+    const actualY = y / this.currScale + this.shiftedAmount[1];
+
+    this.shiftedAmount = [
+      actualX - actualX / newScale,
+      actualY - actualY / newScale
+    ]
+    this.currScale = newScale;
+    this.updateCanvas();
   }
 
   clear() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
   draw(elements: Shape) {
-    elements.draw(this.ctx, this.currScale);
+    elements.draw(this.ctx, this.shiftedAmount, this.currScale);
   }
   drawElements(elements: Shape[]) {
     for (let i = 0; i < elements.length; i++) {
-      elements[i].draw(this.ctx, this.currScale);
+      elements[i].draw(this.ctx, this.shiftedAmount, this.currScale);
     }
   }
 }
@@ -230,7 +245,7 @@ export default function Canvas() {
         <div
           className='test'
           onClick={() => {
-
+            CANVAS.resetZoom()
           }}
         >
           test
