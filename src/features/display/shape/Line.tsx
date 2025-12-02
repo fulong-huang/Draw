@@ -26,10 +26,10 @@ export default class Line extends Shape {
     this.lineWidth = lineWidth;
   }
   draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
-    const x1 = (this.x + shiftedAmount[0]) * scale
-    const y1 = (this.y + shiftedAmount[1]) * scale
-    const x2 = (this.x2 + shiftedAmount[0]) * scale
-    const y2 = (this.y2 + shiftedAmount[1]) * scale
+    const x1 = (this.x - shiftedAmount[0]) * scale
+    const y1 = (this.y - shiftedAmount[1]) * scale
+    const x2 = (this.x2 - shiftedAmount[0]) * scale
+    const y2 = (this.y2 - shiftedAmount[1]) * scale
     ctx.strokeStyle = this.color;
     ctx.lineWidth = this.lineWidth * scale;
     ctx.beginPath();

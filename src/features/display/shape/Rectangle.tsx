@@ -24,9 +24,9 @@ export default class Rectangle extends Shape {
     this.width = width;
     this.height = height;
   }
-  draw(ctx: CanvasRenderingContext2D, shifted: [number, number], scale: number) {
-    const x = (this.x + shifted[0]) * scale;
-    const y = (this.y + shifted[1]) * scale;
+  draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
+    const x = (this.x - shiftedAmount[0]) * scale;
+    const y = (this.y - shiftedAmount[1]) * scale;
     const width = this.width * scale;
     const height = this.height * scale;
     if (this.stroke) {

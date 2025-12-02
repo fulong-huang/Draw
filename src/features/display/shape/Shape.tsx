@@ -9,8 +9,8 @@ export default class Shape {
     shiftedAmount: [number, number],
     scale: number,
   ) {
-    const x = (this.x + shiftedAmount[0]) * scale;
-    const y = (this.y + shiftedAmount[1]) * scale;
+    const x = (this.x - shiftedAmount[0]) * scale;
+    const y = (this.y - shiftedAmount[1]) * scale;
     const width = 500 * scale;
     const height = 500 * scale;
     ctx.strokeStyle = 'red';
