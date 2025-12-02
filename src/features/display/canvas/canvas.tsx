@@ -92,10 +92,8 @@ export class CanvasClass {
 
   handleMouseMovement(event: MouseEvent) {
     if (!this.isMouseDown) return
-    let mousePosX = event.offsetX;
-    let mousePosY = event.offsetY;
-    mousePosX /= this.currScale;
-    mousePosY /= this.currScale;
+    const mousePosX = event.offsetX / this.currScale + this.shiftedAmount[0];
+    const mousePosY = event.offsetY / this.currScale + this.shiftedAmount[1];
     if (this.currShape instanceof Sketch) {
       this.currShape.addPoint(mousePosX, mousePosY)
     }
@@ -114,10 +112,8 @@ export class CanvasClass {
   handleMouseDown(event: MouseEvent) {
     if (this.isMouseDown) return
     this.isMouseDown = true;
-    let mousePosX = event.offsetX;
-    let mousePosY = event.offsetY;
-    mousePosX /= this.currScale;
-    mousePosY /= this.currScale;
+    const mousePosX = event.offsetX / this.currScale + this.shiftedAmount[0];
+    const mousePosY = event.offsetY / this.currScale + this.shiftedAmount[1];
     if (this.selectedShape == Sketch) {
       this.currShape = new Sketch(mousePosX, mousePosY);
     }
