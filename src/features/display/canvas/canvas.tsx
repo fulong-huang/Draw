@@ -127,6 +127,13 @@ export class CanvasClass {
     const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
 
     if (this.mode == 'pointer') {
+      console.log("POINTER")
+      console.log("------")
+      for (let i = 0; i < this.elements.length; i++) {
+        if (this.elements[i].isClicked(mousePosX, mousePosY)) {
+          console.log(this.elements[i])
+        }
+      }
       // this.elements[0].moveTo(mousePosX, mousePosY)
     }
     else if (this.mode == 'draw') {

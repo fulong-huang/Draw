@@ -1,6 +1,7 @@
 export default class Shape {
   x: number;
   y: number;
+
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
@@ -19,6 +20,10 @@ export default class Shape {
   moveTo(x: number, y: number) {
     this.x = x
     this.y = y
+  }
+
+  isClicked(x: number, y: number) {
+    return Math.abs(this.x + this.y - x - y) < 100
   }
 }
 

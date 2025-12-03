@@ -3,15 +3,37 @@ export default class Sketch extends Shape {
   lineWidth: number;
   color: string;
   points: number[];
+  bounds: { x1: number, y1: number, x2: number, y2: number };
   constructor(x: number, y: number, points: number[] = [], lineWidth: number = 20, color: string = 'red') {
     super(x, y);
     this.color = color;
     this.lineWidth = lineWidth;
     this.points = points;
+    this.bounds = {
+      x1: x - lineWidth / 2, y1: y,
+      x2: x - lineWidth / 2, y2: y
+    }
   }
   addPoint(x: number, y: number) {
     this.points.push(x);
     this.points.push(y);
+    if (x < this.bounds.x1) {
+      this.bounds.x1 = x
+    }
+    else if (x > this.bounds.x2) {
+      this.bounds.x2 = x
+    }
+    if (y < this.bounds.y1) {
+      this.bounds.y1 = y
+    }
+    else if (y > this.bounds.y2) {
+      this.bounds.y2 = y
+    }
+  }
+
+  isClicked(x: number, y: number) {
+    return this.bounds.x1 <= x && x <= this.bounds.x2 &&
+      this.bounds.y1 <= y && y <= this.bounds.y2
   }
 
   moveTo(x: number, y: number) {
@@ -23,6 +45,10 @@ export default class Sketch extends Shape {
       this.points[i] += diffX
       this.points[i + 1] += diffY
     }
+    this.bounds.x1 += diffX
+    this.bounds.x2 += diffX
+    this.bounds.y1 += diffY
+    this.bounds.y2 += diffY
   }
 
   draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
@@ -33,7 +59,8 @@ export default class Sketch extends Shape {
     const y = (this.y - shiftedAmount[1]) * scale
     ctx.moveTo(x, y);
     if (this.points.length == 0) {
-      ctx.lineTo(x, y);
+      ctx.moveTo(x - this.lineWidth / 2, y);
+      ctx.lineTo(x + this.lineWidth / 2, y);
     }
     else {
       for (let i = 0; i < this.points.length; i += 2) {

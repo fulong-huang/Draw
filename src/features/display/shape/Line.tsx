@@ -4,6 +4,7 @@ export default class Line extends Shape {
   y2: number
   lineWidth: number;
   color: string;
+  bounds: { x1: number, y1: number, x2: number, y2: number };
   constructor(x: number, y: number, x2: number, y2: number,
     lineWidth: number = 5, color = 'white') {
     super(x, y);
@@ -11,6 +12,19 @@ export default class Line extends Shape {
     this.y2 = y2;
     this.lineWidth = lineWidth;
     this.color = color;
+
+    this.bounds = {
+      x1: x, y1: y, x2: x2, y2: y2
+    }
+
+    if (x > x2) {
+      this.bounds.x1 = x2
+      this.bounds.x2 = x
+    }
+    if (y > y2) {
+      this.bounds.y1 = y2
+      this.bounds.y2 = y
+    }
   }
   lineExist() {
     return this.x != this.x2, this.y != this.y2
@@ -18,6 +32,23 @@ export default class Line extends Shape {
   movePoint2(x2: number, y2: number) {
     this.x2 = x2
     this.y2 = y2
+
+    if (this.x > x2) {
+      this.bounds.x1 = x2
+      this.bounds.x2 = this.x
+    }
+    else {
+      this.bounds.x1 = this.x
+      this.bounds.x2 = x2
+    }
+    if (this.y > y2) {
+      this.bounds.y1 = y2
+      this.bounds.y2 = this.y
+    }
+    else {
+      this.bounds.y1 = this.y
+      this.bounds.y2 = y2
+    }
   }
   setColor(color: string) {
     this.color = color;
@@ -26,11 +57,26 @@ export default class Line extends Shape {
     this.lineWidth = lineWidth;
   }
   moveTo(x: number, y: number) {
-    this.x2 += (x - this.x)
-    this.y2 += (y - this.y)
+    const diffX = x - this.x
+    const diffY = y - this.y
+    this.x2 += diffX
+    this.y2 += diffY
     this.x = x
     this.y = y
+    this.bounds.x1 -= diffX
+    this.bounds.x2 -= diffX
+    this.bounds.y1 -= diffY
+    this.bounds.y2 -= diffY
   }
+  isClicked(x: number, y: number) {
+    const leftX = this.bounds.x1 - this.lineWidth / 2
+    const topY = this.bounds.y1 - this.lineWidth / 2
+    const rightX = this.bounds.x2 + this.lineWidth / 2
+    const botY = this.bounds.y2 + this.lineWidth / 2
+    return leftX < x && x < rightX &&
+      topY < y && y < botY
+  }
+
   draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
     const x1 = (this.x - shiftedAmount[0]) * scale
     const y1 = (this.y - shiftedAmount[1]) * scale

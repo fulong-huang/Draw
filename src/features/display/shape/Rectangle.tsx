@@ -5,6 +5,7 @@ export default class Rectangle extends Shape {
   color: string;
   stroke: boolean;
   lineWidth: number;
+  bounds: { x1: number, y1: number, x2: number, y2: number };
   constructor(x: number, y: number, width = 50, height = 20, color = 'black', stroke = true, lineWidth = 1) {
     super(x, y);
     this.width = width;
@@ -12,6 +13,19 @@ export default class Rectangle extends Shape {
     this.color = color;
     this.stroke = stroke;
     this.lineWidth = lineWidth;
+
+    this.bounds = {
+      x1: x, y1: y,
+      x2: x + width, y2: y + height
+    }
+    if (width < 0) {
+      this.bounds.x1 = x + width;
+      this.bounds.x2 = x;
+    }
+    if (height < 0) {
+      this.bounds.y1 = y + height;
+      this.bounds.y2 = y;
+    }
   }
   rectExist() {
     return this.width != 0 && this.height != 0;
@@ -19,10 +33,47 @@ export default class Rectangle extends Shape {
   setDiagonal(x2: number, y2: number) {
     this.width = x2 - this.x;
     this.height = y2 - this.y;
+    if (this.x > x2) {
+      this.bounds.x1 = x2
+      this.bounds.x2 = this.x
+    }
+    if (this.x < x2) {
+      this.bounds.x1 = this.x
+      this.bounds.x2 = x2
+    }
+    if (this.y > y2) {
+      this.bounds.y1 = y2
+      this.bounds.y2 = this.y
+    }
+    if (this.y < y2) {
+      this.bounds.y1 = this.y
+      this.bounds.y2 = y2
+    }
   }
   changeDimension(width: number, height: number) {
     this.width = width;
     this.height = height;
+
+    if (width > 0) {
+      this.bounds.x1 = this.x
+      this.bounds.x2 = this.x + width
+    }
+    if (width < 0) {
+      this.bounds.x1 = this.x + width
+      this.bounds.x2 = this.x
+    }
+    if (height > 0) {
+      this.bounds.y1 = this.y
+      this.bounds.y2 = this.y + height
+    }
+    if (height < 0) {
+      this.bounds.y1 = this.y + height
+      this.bounds.y2 = this.y
+    }
+  }
+  isClicked(x: number, y: number) {
+    return this.bounds.x1 <= x && x <= this.bounds.x2 &&
+      this.bounds.y1 <= y && y <= this.bounds.y2
   }
   draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
     const x = (this.x - shiftedAmount[0]) * scale;
