@@ -14,6 +14,17 @@ export default class Sketch extends Shape {
     this.points.push(y);
   }
 
+  moveTo(x: number, y: number) {
+    const diffX = x - this.x
+    const diffY = y - this.y
+    this.x = x
+    this.y = y
+    for (let i = 0; i < this.points.length; i += 2) {
+      this.points[i] += diffX
+      this.points[i + 1] += diffY
+    }
+  }
+
   draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
     ctx.strokeStyle = this.color;
     ctx.lineWidth = this.lineWidth * scale;

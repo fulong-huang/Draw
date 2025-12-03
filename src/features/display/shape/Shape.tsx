@@ -16,5 +16,9 @@ export default class Shape {
     ctx.strokeStyle = 'red';
     ctx.strokeRect(x, y, width, height);
   }
+  moveTo(x: number, y: number) {
+    this.x = x
+    this.y = y
+  }
 }
 

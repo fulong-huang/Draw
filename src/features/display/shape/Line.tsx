@@ -25,6 +25,12 @@ export default class Line extends Shape {
   setLineWidth(lineWidth: number) {
     this.lineWidth = lineWidth;
   }
+  moveTo(x: number, y: number) {
+    this.x2 += (x - this.x)
+    this.y2 += (y - this.y)
+    this.x = x
+    this.y = y
+  }
   draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
     const x1 = (this.x - shiftedAmount[0]) * scale
     const y1 = (this.y - shiftedAmount[1]) * scale

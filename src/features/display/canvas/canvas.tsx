@@ -17,12 +17,13 @@ export class CanvasClass {
   width: number = 0;
   height: number = 0;
 
-  sk: Sketch = new Sketch(500, 500);
-  elements: Array<Shape> = [this.sk];
+  elements: Array<Shape> = [];
   isMouseDown: boolean = false;
   backTrack = 0;
   currShape?: Sketch | Line | Rectangle;
   selectedShape: typeof Sketch | typeof Rectangle | typeof Line = Sketch;
+
+  mode: 'pointer' | 'draw' = 'draw'
 
   mouseDownHandler = (e: MouseEvent) => this.handleMouseDown(e);
   mouseUpHandler = () => this.handleMouseUp();
@@ -90,64 +91,80 @@ export class CanvasClass {
     if (this.currShape) this.draw(this.currShape);
   }
 
+  getActualCoordinate(x: number, y: number): [number, number] {
+    x = x / this.currScale + this.shiftedAmount[0];
+    y = y / this.currScale + this.shiftedAmount[1];
+    return [x, y]
+  }
+
   handleMouseMovement(event: MouseEvent) {
     if (!this.isMouseDown) return
-    const mousePosX = event.offsetX / this.currScale + this.shiftedAmount[0];
-    const mousePosY = event.offsetY / this.currScale + this.shiftedAmount[1];
-    if (this.currShape instanceof Sketch) {
-      this.currShape.addPoint(mousePosX, mousePosY)
+    const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
+    if (this.mode == 'pointer') {
+      this.elements[0].moveTo(mousePosX, mousePosY)
     }
-    else if (this.currShape instanceof Rectangle) {
-      this.currShape.setDiagonal(mousePosX, mousePosY)
-    }
-    else if (this.currShape instanceof Line) {
-      this.currShape.movePoint2(mousePosX, mousePosY)
-    }
-    else {
-      console.log("else")
+    else if (this.mode == 'draw') {
+      if (this.currShape instanceof Sketch) {
+        this.currShape.addPoint(mousePosX, mousePosY)
+      }
+      else if (this.currShape instanceof Rectangle) {
+        this.currShape.setDiagonal(mousePosX, mousePosY)
+      }
+      else if (this.currShape instanceof Line) {
+        this.currShape.movePoint2(mousePosX, mousePosY)
+      }
+      else {
+        console.log("else")
+      }
     }
     this.updateCanvas();
 
   }
   handleMouseDown(event: MouseEvent) {
     if (this.isMouseDown) return
+
     this.isMouseDown = true;
-    const mousePosX = event.offsetX / this.currScale + this.shiftedAmount[0];
-    const mousePosY = event.offsetY / this.currScale + this.shiftedAmount[1];
-    if (this.selectedShape == Sketch) {
-      this.currShape = new Sketch(mousePosX, mousePosY);
+    const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
+
+    if (this.mode == 'pointer') {
+      // this.elements[0].moveTo(mousePosX, mousePosY)
     }
-    else if (this.selectedShape == Rectangle) {
-      this.currShape = new Rectangle(
-        mousePosX, mousePosY, 0, 0
-      );
+    else if (this.mode == 'draw') {
+      if (this.selectedShape == Sketch) {
+        this.currShape = new Sketch(mousePosX, mousePosY);
+      }
+      else if (this.selectedShape == Rectangle) {
+        this.currShape = new Rectangle(
+          mousePosX, mousePosY, 0, 0
+        );
+      }
+      else if (this.selectedShape == Line) {
+        this.currShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY);
+      }
     }
-    else if (this.selectedShape == Line) {
-      this.currShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY);
-    }
-    else {
-      // TODO: 
-      // displace image
-    }
+
   }
   handleMouseUp() {
     this.isMouseDown = false;
-    if (this.currShape instanceof Sketch) {
-      this.elements.push(this.currShape)
-    }
-    else if (this.currShape instanceof Rectangle) {
-      if (this.currShape.rectExist()) {
+
+    if (this.mode == 'draw') {
+      if (this.currShape instanceof Sketch) {
         this.elements.push(this.currShape)
       }
-    }
-    else if (this.currShape instanceof Line) {
-      if (this.currShape.lineExist()) {
-        this.elements.push(this.currShape)
+      else if (this.currShape instanceof Rectangle) {
+        if (this.currShape.rectExist()) {
+          this.elements.push(this.currShape)
+        }
       }
-    }
-    else {
-      // TODO: 
-      // displace image
+      else if (this.currShape instanceof Line) {
+        if (this.currShape.lineExist()) {
+          this.elements.push(this.currShape)
+        }
+      }
+      else {
+        // TODO: 
+        // displace image
+      }
     }
     this.updateCanvas();
   }
@@ -161,6 +178,7 @@ export class CanvasClass {
     this.zoom(event.offsetX, event.offsetY, scale)
   }
   setSelectedTool(toolSelected: number) {
+    this.mode = 'draw'
     if (toolSelected == 0) {
       this.selectedShape = Sketch
     }
@@ -168,6 +186,10 @@ export class CanvasClass {
       this.selectedShape = Line
     }
     else if (toolSelected == 2) {
+      this.selectedShape = Rectangle
+    }
+    else if (toolSelected == 3) {
+      this.mode = 'pointer'
       this.selectedShape = Rectangle
     }
     else {
@@ -242,6 +264,7 @@ export default function Canvas() {
           className='test'
           onClick={() => {
             CANVAS.resetZoom()
+            CANVAS.setSelectedTool(3);
           }}
         >
           test
