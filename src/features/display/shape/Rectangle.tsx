@@ -71,6 +71,16 @@ export default class Rectangle extends Shape {
       this.bounds.y2 = this.y
     }
   }
+  moveTo(x: number, y: number) {
+    const diffX = x - this.x
+    const diffY = y - this.y
+    this.x = x
+    this.y = y
+    this.bounds.x1 += diffX
+    this.bounds.x2 += diffX
+    this.bounds.y1 += diffY
+    this.bounds.y2 += diffY
+  }
   isClicked(x: number, y: number) {
     return this.bounds.x1 <= x && x <= this.bounds.x2 &&
       this.bounds.y1 <= y && y <= this.bounds.y2

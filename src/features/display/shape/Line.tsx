@@ -63,10 +63,10 @@ export default class Line extends Shape {
     this.y2 += diffY
     this.x = x
     this.y = y
-    this.bounds.x1 -= diffX
-    this.bounds.x2 -= diffX
-    this.bounds.y1 -= diffY
-    this.bounds.y2 -= diffY
+    this.bounds.x1 += diffX
+    this.bounds.x2 += diffX
+    this.bounds.y1 += diffY
+    this.bounds.y2 += diffY
   }
   isClicked(x: number, y: number) {
     const leftX = this.bounds.x1 - this.lineWidth / 2
