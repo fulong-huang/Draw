@@ -24,6 +24,7 @@ export class CanvasClass {
   currShape?: Sketch | Line | Rectangle;
   selectedShapeIdx: number = -1;
   isMovingShape: boolean = false;
+  movementOffset: [number, number] = [0, 0];
   selectedShape: typeof Sketch | typeof Rectangle | typeof Line = Sketch;
 
   mode: 'pointer' | 'draw' = 'draw'
@@ -94,6 +95,10 @@ export class CanvasClass {
     if (this.currShape) this.draw(this.currShape);
   }
 
+  calculateMovementOffset(mouseX: number, mouseY: number) {
+    const [objX, objY] = this.elements[this.selectedShapeIdx].getPosition();
+    this.movementOffset = [mouseX - objX, mouseY - objY]
+  }
   getActualCoordinate(x: number, y: number): [number, number] {
     x = x / this.currScale + this.shiftedAmount[0];
     y = y / this.currScale + this.shiftedAmount[1];
@@ -105,7 +110,7 @@ export class CanvasClass {
     const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
     if (this.mode == 'pointer') {
       if (this.isMovingShape) {
-        this.elements[this.selectedShapeIdx].moveTo(mousePosX, mousePosY)
+        this.elements[this.selectedShapeIdx].moveTo(mousePosX, mousePosY, this.movementOffset)
       }
     }
     else if (this.mode == 'draw') {
@@ -138,6 +143,7 @@ export class CanvasClass {
         this.elements[this.selectedShapeIdx].isClicked(mousePosX, mousePosY)
       ) {
         this.isMovingShape = true
+        this.calculateMovementOffset(mousePosX, mousePosY);
       }
       // this.elements[0].moveTo(mousePosX, mousePosY)
     }

@@ -56,13 +56,13 @@ export default class Line extends Shape {
   setLineWidth(lineWidth: number) {
     this.lineWidth = lineWidth;
   }
-  moveTo(x: number, y: number) {
-    const diffX = x - this.x
-    const diffY = y - this.y
+  moveTo(x: number, y: number, offset: [number, number] = [0, 0]) {
+    const diffX = x - this.x - offset[0]
+    const diffY = y - this.y - offset[1]
     this.x2 += diffX
     this.y2 += diffY
-    this.x = x
-    this.y = y
+    this.x = x - offset[0]
+    this.y = y - offset[1]
     this.bounds.x1 += diffX
     this.bounds.x2 += diffX
     this.bounds.y1 += diffY

@@ -71,11 +71,11 @@ export default class Rectangle extends Shape {
       this.bounds.y2 = this.y
     }
   }
-  moveTo(x: number, y: number) {
-    const diffX = x - this.x
-    const diffY = y - this.y
-    this.x = x
-    this.y = y
+  moveTo(x: number, y: number, offset: [number, number] = [0, 0]) {
+    const diffX = x - this.x - offset[0]
+    const diffY = y - this.y - offset[1]
+    this.x = x - offset[0]
+    this.y = y - offset[1]
     this.bounds.x1 += diffX
     this.bounds.x2 += diffX
     this.bounds.y1 += diffY
