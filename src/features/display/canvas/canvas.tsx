@@ -1,5 +1,6 @@
 import Shape from '../shape/Shape.tsx'
 import Rectangle from '../shape/Rectangle.tsx'
+import Circle from '../shape/Circle.tsx'
 import Line from '../shape/Line.tsx'
 import Sketch from '../shape/Sketch.tsx'
 import { useState } from 'react'
@@ -21,11 +22,11 @@ export class CanvasClass {
   isMouseDown: boolean = false;
   backTrack = 0;
   mouseMoved: boolean = false;
-  currShape?: Sketch | Line | Rectangle;
+  currShape?: Sketch | Line | Rectangle | Circle;
   selectedShapeIdx: number = -1;
   isMovingShape: boolean = false;
   movementOffset: [number, number] = [0, 0];
-  selectedShape: typeof Sketch | typeof Rectangle | typeof Line = Sketch;
+  selectedShape: typeof Sketch | typeof Rectangle | typeof Line | typeof Circle = Sketch;
 
   mode: 'pointer' | 'draw' = 'draw'
 
@@ -128,12 +129,14 @@ export class CanvasClass {
       else if (this.currShape instanceof Line) {
         this.currShape.movePoint2(mousePosX, mousePosY)
       }
+      else if (this.currShape instanceof Circle) {
+        this.currShape.setEndPoint(mousePosX, mousePosY)
+      }
       else {
         console.log("else")
       }
     }
     this.updateCanvas();
-
   }
   handleMouseDown(event: MouseEvent) {
     if (this.isMouseDown) return
@@ -166,6 +169,9 @@ export class CanvasClass {
       else if (this.selectedShape == Line) {
         this.currShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY);
       }
+      else if (this.selectedShape == Circle) {
+        this.currShape = new Circle(mousePosX, mousePosY, 0);
+      }
     }
 
   }
@@ -190,18 +196,8 @@ export class CanvasClass {
       }
     }
     else if (this.mode == 'draw') {
-      if (this.currShape instanceof Sketch) {
+      if (this.currShape && this.currShape.exist()) {
         this.elements.push(this.currShape)
-      }
-      else if (this.currShape instanceof Rectangle) {
-        if (this.currShape.rectExist()) {
-          this.elements.push(this.currShape)
-        }
-      }
-      else if (this.currShape instanceof Line) {
-        if (this.currShape.lineExist()) {
-          this.elements.push(this.currShape)
-        }
       }
       else {
         // TODO: 
@@ -219,18 +215,23 @@ export class CanvasClass {
       scale = this.currScale / this.scaleAmount;
     this.zoom(event.offsetX, event.offsetY, scale)
   }
-  setSelectedTool(toolSelected: number) {
+  setSelectedTool(
+    toolSelected: 'sketch' | 'line' | 'rectangle' | 'circle' | 'pointer'
+  ) {
     this.mode = 'draw'
-    if (toolSelected == 0) {
+    if (toolSelected == 'sketch') {
       this.selectedShape = Sketch
     }
-    else if (toolSelected == 1) {
+    else if (toolSelected == 'line') {
       this.selectedShape = Line
     }
-    else if (toolSelected == 2) {
+    else if (toolSelected == 'rectangle') {
       this.selectedShape = Rectangle
     }
-    else if (toolSelected == 3) {
+    else if (toolSelected == 'circle') {
+      this.selectedShape = Circle
+    }
+    else if (toolSelected == 'pointer') {
       this.mode = 'pointer'
       this.selectedShape = Rectangle
     }
@@ -283,12 +284,16 @@ export class CanvasClass {
       elements[i].draw(this.ctx, this.shiftedAmount, this.currScale);
     }
   }
+
+  test() {
+    this.setSelectedTool('pointer');
+  }
 }
 
 
 export const CANVAS = new CanvasClass();
 export default function Canvas() {
-  const [selectedTool, setSelectedTool] = useState(0);
+  const [selectedTool, setSelectedTool] = useState('sketch');
 
   return (
     <>
@@ -297,8 +302,7 @@ export default function Canvas() {
         <div
           className='test'
           onClick={() => {
-            CANVAS.resetZoom()
-            CANVAS.setSelectedTool(3);
+            CANVAS.test()
           }}
         >
           test
@@ -306,42 +310,57 @@ export default function Canvas() {
 
         <div className='toolList'>
           <div className={
-            selectedTool == 0 ?
+            selectedTool == 'sketch' ?
               'toolSelector selectedTool' :
               'toolSelector'
           }
             onClick={
               () => {
-                CANVAS.setSelectedTool(0)
-                setSelectedTool(0)
+                CANVAS.setSelectedTool('sketch')
+                setSelectedTool('sketch')
               }
             }
           >
             Sketch
           </div>
           <div className={
-            selectedTool == 1 ?
+            selectedTool == 'line' ?
               'toolSelector selectedTool' :
               'toolSelector'
           }
             onClick={
               () => {
-                CANVAS.setSelectedTool(1)
-                setSelectedTool(1)
+                CANVAS.setSelectedTool('line')
+                setSelectedTool('line')
               }
             }
           >
             Line
           </div>
           <div className={
-            selectedTool == 2 ?
+            selectedTool == 'circle' ?
               'toolSelector selectedTool' :
               'toolSelector'
           }
             onClick={
               () => {
-                CANVAS.setSelectedTool(2)
-                setSelectedTool(2)
+                CANVAS.setSelectedTool('circle')
+                setSelectedTool('circle')
+              }
+            }
+          >
+            Circle
+
+          </div>
+          <div className={
+            selectedTool == 'rectangle' ?
+              'toolSelector selectedTool' :
+              'toolSelector'
+          }
+            onClick={
+              () => {
+                CANVAS.setSelectedTool('rectangle')
+                setSelectedTool('rectangle')
               }
             }
           >

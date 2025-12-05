@@ -35,6 +35,9 @@ export default class Sketch extends Shape {
     return this.bounds.x1 <= x && x <= this.bounds.x2 &&
       this.bounds.y1 <= y && y <= this.bounds.y2
   }
+  exist() {
+    return true;
+  }
 
   moveTo(x: number, y: number, offset: [number, number] = [0, 0]) {
     const diffX = x - this.x - offset[0]

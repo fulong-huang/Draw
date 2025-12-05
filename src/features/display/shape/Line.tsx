@@ -26,7 +26,7 @@ export default class Line extends Shape {
       this.bounds.y2 = y
     }
   }
-  lineExist() {
+  exist() {
     return this.x != this.x2, this.y != this.y2
   }
   movePoint2(x2: number, y2: number) {

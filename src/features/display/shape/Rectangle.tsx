@@ -27,7 +27,7 @@ export default class Rectangle extends Shape {
       this.bounds.y2 = y;
     }
   }
-  rectExist() {
+  exist() {
     return this.width != 0 && this.height != 0;
   }
   setDiagonal(x2: number, y2: number) {
