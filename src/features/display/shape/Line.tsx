@@ -2,9 +2,7 @@ import Shape from './Shape.tsx'
 export default class Line extends Shape {
   x2: number;
   y2: number
-  lineWidth: number;
   color: string;
-  bounds: { x1: number, y1: number, x2: number, y2: number };
   constructor(x: number, y: number, x2: number, y2: number,
     lineWidth: number = 5, color = 'white') {
     super(x, y);
@@ -68,15 +66,6 @@ export default class Line extends Shape {
     this.bounds.y1 += diffY
     this.bounds.y2 += diffY
   }
-  isClicked(x: number, y: number) {
-    const leftX = this.bounds.x1 - this.lineWidth / 2
-    const topY = this.bounds.y1 - this.lineWidth / 2
-    const rightX = this.bounds.x2 + this.lineWidth / 2
-    const botY = this.bounds.y2 + this.lineWidth / 2
-    return leftX < x && x < rightX &&
-      topY < y && y < botY
-  }
-
   draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
     const x1 = (this.x - shiftedAmount[0]) * scale
     const y1 = (this.y - shiftedAmount[1]) * scale

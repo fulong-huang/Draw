@@ -94,6 +94,9 @@ export class CanvasClass {
       this.elements.slice(0, this.elements.length - this.backTrack)
     );
     if (this.currShape) this.draw(this.currShape);
+    if (this.selectedShapeIdx >= 0) {
+      this.elements[this.selectedShapeIdx].drawBoundingBox(this.ctx, this.shiftedAmount, this.currScale)
+    }
   }
 
   calculateMovementOffset(mouseX: number, mouseY: number) {
@@ -108,6 +111,7 @@ export class CanvasClass {
 
   handleMouseMovement(event: MouseEvent) {
     if (!this.isMouseDown) return
+    this.mouseMoved = true;
     const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
     if (this.mode == 'pointer') {
       if (this.isMovingShape) {
@@ -146,7 +150,6 @@ export class CanvasClass {
     this.mouseMoved = false;
 
     if (this.mode == 'pointer') {
-      console.log("POINTER")
       if (this.selectedShapeIdx >= 0 &&
         this.elements[this.selectedShapeIdx].isClicked(mousePosX, mousePosY)
       ) {
@@ -154,10 +157,12 @@ export class CanvasClass {
         this.calculateMovementOffset(mousePosX, mousePosY);
       }
       else {
+        this.isMovingShape = false
         // 
       }
     }
     else if (this.mode == 'draw') {
+      this.selectedShapeIdx = -1
       if (this.selectedShape == Sketch) {
         this.currShape = new Sketch(mousePosX, mousePosY);
       }

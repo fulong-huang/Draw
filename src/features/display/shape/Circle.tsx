@@ -3,8 +3,6 @@ export default class Circle extends Shape {
   radius: number;
   color: string;
   stroke: boolean;
-  lineWidth: number;
-  bounds: { x1: number, y1: number, x2: number, y2: number };
   constructor(x: number, y: number, radius = 50, color = 'black', stroke = true, lineWidth = 1) {
     super(x, y);
     this.radius = radius;
@@ -30,8 +28,8 @@ export default class Circle extends Shape {
     const maxDiff = diffX < diffY ? diffY : diffX
     this.radius = maxDiff
     this.bounds = {
-      x1: x - this.radius, y1: y - this.radius,
-      x2: x + this.radius, y2: y + this.radius
+      x1: this.x - this.radius, y1: this.y - this.radius,
+      x2: this.x + this.radius, y2: this.y + this.radius
     }
   }
   moveTo(x: number, y: number, offset: [number, number] = [0, 0]) {
@@ -43,10 +41,6 @@ export default class Circle extends Shape {
     this.bounds.x2 += diffX
     this.bounds.y1 += diffY
     this.bounds.y2 += diffY
-  }
-  isClicked(x: number, y: number) {
-    return this.bounds.x1 <= x && x <= this.bounds.x2 &&
-      this.bounds.y1 <= y && y <= this.bounds.y2
   }
   draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
     const x = (this.x - shiftedAmount[0]) * scale;

@@ -4,8 +4,6 @@ export default class Rectangle extends Shape {
   height: number;
   color: string;
   stroke: boolean;
-  lineWidth: number;
-  bounds: { x1: number, y1: number, x2: number, y2: number };
   constructor(x: number, y: number, width = 50, height = 20, color = 'black', stroke = true, lineWidth = 1) {
     super(x, y);
     this.width = width;
@@ -80,10 +78,6 @@ export default class Rectangle extends Shape {
     this.bounds.x2 += diffX
     this.bounds.y1 += diffY
     this.bounds.y2 += diffY
-  }
-  isClicked(x: number, y: number) {
-    return this.bounds.x1 <= x && x <= this.bounds.x2 &&
-      this.bounds.y1 <= y && y <= this.bounds.y2
   }
   draw(ctx: CanvasRenderingContext2D, shiftedAmount: [number, number], scale: number) {
     const x = (this.x - shiftedAmount[0]) * scale;

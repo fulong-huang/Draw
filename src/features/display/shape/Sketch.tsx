@@ -1,17 +1,15 @@
 import Shape from './Shape.tsx'
 export default class Sketch extends Shape {
-  lineWidth: number;
   color: string;
   points: number[];
-  bounds: { x1: number, y1: number, x2: number, y2: number };
   constructor(x: number, y: number, points: number[] = [], lineWidth: number = 20, color: string = 'red') {
     super(x, y);
     this.color = color;
     this.lineWidth = lineWidth;
     this.points = points;
     this.bounds = {
-      x1: x - lineWidth / 2, y1: y,
-      x2: x - lineWidth / 2, y2: y
+      x1: x, y1: y,
+      x2: x, y2: y
     }
   }
   addPoint(x: number, y: number) {
@@ -31,10 +29,6 @@ export default class Sketch extends Shape {
     }
   }
 
-  isClicked(x: number, y: number) {
-    return this.bounds.x1 <= x && x <= this.bounds.x2 &&
-      this.bounds.y1 <= y && y <= this.bounds.y2
-  }
   exist() {
     return true;
   }
