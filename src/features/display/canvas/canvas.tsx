@@ -266,16 +266,8 @@ export class CanvasClass {
     this.updateCanvas();
   }
   zoom(x: number, y: number, newScale: number) {
-    // Customize zooming and shifting 
-    //  to change each element's position
-    // this.ctx.setTransform(scaleBy, 0, 0, scaleBy, x, y);
-    const actualX = x / this.currScale + this.shiftedAmount[0];
-    const actualY = y / this.currScale + this.shiftedAmount[1];
-
-    this.shiftedAmount = [
-      actualX - actualX / newScale,
-      actualY - actualY / newScale
-    ]
+    this.shiftedAmount[0] -= (x * (1 / newScale - 1 / this.currScale))
+    this.shiftedAmount[1] -= (y * (1 / newScale - 1 / this.currScale))
     this.currScale = newScale;
     this.updateCanvas();
   }
