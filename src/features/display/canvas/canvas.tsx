@@ -112,6 +112,11 @@ export class CanvasClass {
       if (this.isMovingShape) {
         this.elements[this.selectedShapeIdx].moveTo(mousePosX, mousePosY, this.movementOffset)
       }
+      else {
+        // Use mouse event to calculate shifted amount instead
+        this.shiftedAmount[0] -= event.movementX * (1 / this.currScale)
+        this.shiftedAmount[1] -= event.movementY * (1 / this.currScale)
+      }
     }
     else if (this.mode == 'draw') {
       if (this.currShape instanceof Sketch) {
@@ -145,7 +150,9 @@ export class CanvasClass {
         this.isMovingShape = true
         this.calculateMovementOffset(mousePosX, mousePosY);
       }
-      // this.elements[0].moveTo(mousePosX, mousePosY)
+      else {
+        // 
+      }
     }
     else if (this.mode == 'draw') {
       if (this.selectedShape == Sketch) {
@@ -172,7 +179,6 @@ export class CanvasClass {
         this.selectedShapeIdx = -1;
         for (let i = 0; i < this.elements.length; i++) {
           if (this.elements[i].isClicked(mousePosX, mousePosY)) {
-            console.log(this.elements[i])
             this.selectedShapeIdx = i;
             break;
           }
