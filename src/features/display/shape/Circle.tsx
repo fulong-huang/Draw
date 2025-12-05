@@ -29,6 +29,10 @@ export default class Circle extends Shape {
     // const minDiff = diffX > diffY ? diffY : diffX
     const maxDiff = diffX < diffY ? diffY : diffX
     this.radius = maxDiff
+    this.bounds = {
+      x1: x - this.radius, y1: y - this.radius,
+      x2: x + this.radius, y2: y + this.radius
+    }
   }
   moveTo(x: number, y: number, offset: [number, number] = [0, 0]) {
     const diffX = x - this.x - offset[0]

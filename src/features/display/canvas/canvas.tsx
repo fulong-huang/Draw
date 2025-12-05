@@ -298,17 +298,32 @@ export default function Canvas() {
   return (
     <>
       <div className='managerContainer'>
-
-        <div
-          className='test'
-          onClick={() => {
-            CANVAS.test()
-          }}
-        >
-          test
-        </div>
-
+        {
+          // 
+          //         <div
+          //           className='test'
+          //           onClick={() => {
+          //             CANVAS.test()
+          //           }}
+          //         >
+          //           test
+          //         </div>
+        }
         <div className='toolList'>
+          <div className={
+            selectedTool == 'pointer' ?
+              'toolSelector selectedTool' :
+              'toolSelector'
+          }
+            onClick={
+              () => {
+                CANVAS.setSelectedTool('pointer')
+                setSelectedTool('pointer')
+              }
+            }
+          >
+            Pointer
+          </div>
           <div className={
             selectedTool == 'sketch' ?
               'toolSelector selectedTool' :
