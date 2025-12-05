@@ -20,13 +20,16 @@ export class CanvasClass {
   elements: Array<Shape> = [];
   isMouseDown: boolean = false;
   backTrack = 0;
+  mouseMoved: boolean = false;
   currShape?: Sketch | Line | Rectangle;
+  selectedShapeIdx: number = -1;
+  isMovingShape: boolean = false;
   selectedShape: typeof Sketch | typeof Rectangle | typeof Line = Sketch;
 
   mode: 'pointer' | 'draw' = 'draw'
 
   mouseDownHandler = (e: MouseEvent) => this.handleMouseDown(e);
-  mouseUpHandler = () => this.handleMouseUp();
+  mouseUpHandler = (e: MouseEvent) => this.handleMouseUp(e);
   mouseMoveHandler = (e: MouseEvent) => this.handleMouseMovement(e);
 
   wheelScrollHandler = (e: WheelEvent) => this.handleWheelScroll(e);
@@ -101,7 +104,9 @@ export class CanvasClass {
     if (!this.isMouseDown) return
     const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
     if (this.mode == 'pointer') {
-      this.elements[0].moveTo(mousePosX, mousePosY)
+      if (this.isMovingShape) {
+        this.elements[this.selectedShapeIdx].moveTo(mousePosX, mousePosY)
+      }
     }
     else if (this.mode == 'draw') {
       if (this.currShape instanceof Sketch) {
@@ -125,14 +130,14 @@ export class CanvasClass {
 
     this.isMouseDown = true;
     const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
+    this.mouseMoved = false;
 
     if (this.mode == 'pointer') {
       console.log("POINTER")
-      console.log("------")
-      for (let i = 0; i < this.elements.length; i++) {
-        if (this.elements[i].isClicked(mousePosX, mousePosY)) {
-          console.log(this.elements[i])
-        }
+      if (this.selectedShapeIdx >= 0 &&
+        this.elements[this.selectedShapeIdx].isClicked(mousePosX, mousePosY)
+      ) {
+        this.isMovingShape = true
       }
       // this.elements[0].moveTo(mousePosX, mousePosY)
     }
@@ -151,10 +156,28 @@ export class CanvasClass {
     }
 
   }
-  handleMouseUp() {
+  handleMouseUp(event: MouseEvent) {
     this.isMouseDown = false;
+    const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
 
-    if (this.mode == 'draw') {
+    if (this.mode == 'pointer') {
+      if (!this.mouseMoved) {
+        this.isMovingShape = false
+        this.selectedShapeIdx = -1;
+        for (let i = 0; i < this.elements.length; i++) {
+          if (this.elements[i].isClicked(mousePosX, mousePosY)) {
+            console.log(this.elements[i])
+            this.selectedShapeIdx = i;
+            break;
+          }
+        }
+      }
+      else {
+        // TODO: 
+        // move image
+      }
+    }
+    else if (this.mode == 'draw') {
       if (this.currShape instanceof Sketch) {
         this.elements.push(this.currShape)
       }
