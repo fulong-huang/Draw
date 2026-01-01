@@ -35,6 +35,8 @@ export class CanvasClass {
   mouseMoveHandler = (e: MouseEvent) => this.handleMouseMovement(e);
 
   wheelScrollHandler = (e: WheelEvent) => this.handleWheelScroll(e);
+	
+  keydownHandler = (e: KeyboardEvent) => this.handleKeydown(e);
 
   constructor() {
   }
@@ -53,6 +55,10 @@ export class CanvasClass {
     this.canvas.removeEventListener(
       'wheel', this.wheelScrollHandler
     )
+
+		window.removeEventListener(
+			'keydown', this.keydownHandler
+		)
   }
 
   init() {
@@ -71,11 +77,31 @@ export class CanvasClass {
     this.canvas.addEventListener(
       'wheel', this.wheelScrollHandler
     )
+
+		window.addEventListener(
+			'keydown', this.keydownHandler, true
+		)
     const width = window.innerWidth;
     const height = window.innerHeight;
 
     this.resize(width, height);
   }
+
+	handleKeydown(event: KeyboardEvent){
+		const key = event.key;
+		switch(key){
+			case "Backspace":
+			case "Delete":
+			{
+				if(this.selectedShapeIdx >= 0){
+					this.elements.splice(this.selectedShapeIdx, 1);
+					this.selectedShapeIdx = -1;
+					this.updateCanvas();
+				}
+				break;
+			}
+		}
+	}
 
   resize(width: number, height: number) {
     this.canvas.style.width = width + 'px';
@@ -203,6 +229,7 @@ export class CanvasClass {
     else if (this.mode == 'draw') {
       if (this.currShape && this.currShape.exist()) {
         this.elements.push(this.currShape)
+				this.currShape = null;
       }
       else {
         // TODO: 

@@ -18,15 +18,7 @@ export class ManagerClass {
     this.canvas.cleanUp();
   }
 
-
-
 }
 
 export const MANAGER = new ManagerClass();
-export default function Manager() {
-  return (
-    <>
-    </>
-  )
-}
 

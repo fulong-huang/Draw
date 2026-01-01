@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import './App.css'
-import Manager, { MANAGER } from './features/manager.tsx'
+import { MANAGER } from './features/manager.tsx'
 import Canvas, { CANVAS } from './features/display/canvas/canvas.tsx'
 
 function App() {
@@ -21,7 +21,6 @@ function App() {
   }, [])
   return (
     <>
-      <Manager />
       {<Canvas />}
     </>
   )
