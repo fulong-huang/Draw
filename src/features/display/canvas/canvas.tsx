@@ -28,7 +28,7 @@ export class CanvasClass {
   movementOffset: [number, number] = [0, 0];
   selectedShape: typeof Sketch | typeof Rectangle | typeof Line | typeof Circle = Sketch;
 
-  mode: 'pointer' | 'draw' = 'draw'
+  mode: 'Pointer' | 'Draw' = 'Draw'
 
   mouseDownHandler = (e: MouseEvent) => this.handleMouseDown(e);
   mouseUpHandler = (e: MouseEvent) => this.handleMouseUp(e);
@@ -139,7 +139,7 @@ export class CanvasClass {
     if (!this.isMouseDown) return
     this.mouseMoved = true;
     const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
-    if (this.mode == 'pointer') {
+    if (this.mode == 'Pointer') {
       if (this.isMovingShape) {
         this.elements[this.selectedShapeIdx].moveTo(mousePosX, mousePosY, this.movementOffset)
       }
@@ -149,7 +149,7 @@ export class CanvasClass {
         this.shiftedAmount[1] -= event.movementY * (1 / this.currScale)
       }
     }
-    else if (this.mode == 'draw') {
+    else if (this.mode == 'Draw') {
       if (this.currShape instanceof Sketch) {
         this.currShape.addPoint(mousePosX, mousePosY)
       }
@@ -175,7 +175,7 @@ export class CanvasClass {
     const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
     this.mouseMoved = false;
 
-    if (this.mode == 'pointer') {
+    if (this.mode == 'Pointer') {
       if (this.selectedShapeIdx >= 0 &&
         this.elements[this.selectedShapeIdx].isClicked(mousePosX, mousePosY)
       ) {
@@ -187,7 +187,7 @@ export class CanvasClass {
         // 
       }
     }
-    else if (this.mode == 'draw') {
+    else if (this.mode == 'Draw') {
       this.selectedShapeIdx = -1
       if (this.selectedShape == Sketch) {
         this.currShape = new Sketch(mousePosX, mousePosY);
@@ -210,7 +210,7 @@ export class CanvasClass {
     this.isMouseDown = false;
     const [mousePosX, mousePosY] = this.getActualCoordinate(event.offsetX, event.offsetY)
 
-    if (this.mode == 'pointer') {
+    if (this.mode == 'Pointer') {
       if (!this.mouseMoved) {
         this.isMovingShape = false
         this.selectedShapeIdx = -1;
@@ -226,7 +226,7 @@ export class CanvasClass {
         // move image
       }
     }
-    else if (this.mode == 'draw') {
+    else if (this.mode == 'Draw') {
       if (this.currShape && this.currShape.exist()) {
         this.elements.push(this.currShape)
 				this.currShape = null;
@@ -248,23 +248,23 @@ export class CanvasClass {
     this.zoom(event.offsetX, event.offsetY, scale)
   }
   setSelectedTool(
-    toolSelected: 'sketch' | 'line' | 'rectangle' | 'circle' | 'pointer'
+    toolSelected: 'Sketch' | 'Line' | 'Rectangle' | 'Circle' | 'Pointer'
   ) {
-    this.mode = 'draw'
-    if (toolSelected == 'sketch') {
+    this.mode = 'Draw'
+    if (toolSelected == 'Sketch') {
       this.selectedShape = Sketch
     }
-    else if (toolSelected == 'line') {
+    else if (toolSelected == 'Line') {
       this.selectedShape = Line
     }
-    else if (toolSelected == 'rectangle') {
+    else if (toolSelected == 'Rectangle') {
       this.selectedShape = Rectangle
     }
-    else if (toolSelected == 'circle') {
+    else if (toolSelected == 'Circle') {
       this.selectedShape = Circle
     }
-    else if (toolSelected == 'pointer') {
-      this.mode = 'pointer'
+    else if (toolSelected == 'Pointer') {
+      this.mode = 'Pointer'
       this.selectedShape = Rectangle
     }
     else {
@@ -318,106 +318,76 @@ export class CanvasClass {
   }
 
   test() {
-    this.setSelectedTool('pointer');
+    this.setSelectedTool('Pointer');
   }
 }
 
 
 export const CANVAS = new CanvasClass();
 export default function Canvas() {
-  const [selectedTool, setSelectedTool] = useState('sketch');
+  const [selectedTool, setSelectedTool] = useState('Sketch');
+
+	const toolList = [
+		'Pointer', 
+		'Sketch',
+		'Line',
+		'Circle',
+		'Rectangle',
+	]
+
+	const test = (
+	 <div
+		 className='test'
+		 onClick={() => {
+			 CANVAS.test()
+		 }}
+	 >
+		 test
+	 </div>
+	)
 
   return (
     <>
-      <div className='managerContainer'>
-        {
-          // 
-          //         <div
-          //           className='test'
-          //           onClick={() => {
-          //             CANVAS.test()
-          //           }}
-          //         >
-          //           test
-          //         </div>
-        }
-        <div className='toolList'>
-          <div className={
-            selectedTool == 'pointer' ?
-              'toolSelector selectedTool' :
-              'toolSelector'
-          }
-            onClick={
-              () => {
-                CANVAS.setSelectedTool('pointer')
-                setSelectedTool('pointer')
-              }
-            }
-          >
-            Pointer
-          </div>
-          <div className={
-            selectedTool == 'sketch' ?
-              'toolSelector selectedTool' :
-              'toolSelector'
-          }
-            onClick={
-              () => {
-                CANVAS.setSelectedTool('sketch')
-                setSelectedTool('sketch')
-              }
-            }
-          >
-            Sketch
-          </div>
-          <div className={
-            selectedTool == 'line' ?
-              'toolSelector selectedTool' :
-              'toolSelector'
-          }
-            onClick={
-              () => {
-                CANVAS.setSelectedTool('line')
-                setSelectedTool('line')
-              }
-            }
-          >
-            Line
-          </div>
-          <div className={
-            selectedTool == 'circle' ?
-              'toolSelector selectedTool' :
-              'toolSelector'
-          }
-            onClick={
-              () => {
-                CANVAS.setSelectedTool('circle')
-                setSelectedTool('circle')
-              }
-            }
-          >
-            Circle
+			<div className='canvas-container'>
 
-          </div>
-          <div className={
-            selectedTool == 'rectangle' ?
-              'toolSelector selectedTool' :
-              'toolSelector'
-          }
-            onClick={
-              () => {
-                CANVAS.setSelectedTool('rectangle')
-                setSelectedTool('rectangle')
-              }
-            }
-          >
-            Rectangle
+				<div className='tool-box-container'>
+					{
+						// test
+					}
+					<div className='tool-box'>
+						<div className='tool-list'>
 
-          </div>
-        </div>
+							{
+								toolList.map((item) => {
+									return (<div className={
+										selectedTool == item?
+										'tool-selector selected-tool' :
+											'tool-selector'
+									}
+										onClick={
+											() => {
+												CANVAS.setSelectedTool(item)
+												setSelectedTool(item)
+											}
+										}
+									>
+										{item}
+									</div>
+									)
+								})
+							}
+						
+						</div>
+
+						<div className='tool-color-picker'>
+							color picker
+						</div>
+					</div>
+				</div>
+
+				<canvas id='canvas' className='canvas'>
+				</canvas>
       </div>
-      <canvas id='canvas' className='canvas'>
-      </canvas>
     </>
   )
 }

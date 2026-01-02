@@ -1,10 +1,51 @@
-.canvas{
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background-color: gray;
-  color: cyan;
-  width: 100%;
-  height: 100%;
+.canvas-container{
+	display: flex;
 }
+/*	Canvas container */
+	.tool-box-container{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	/*	Tool box container */
+		.tool-box{
+			padding: 30px;
+		}
+
+		/* Tool box */
+			.tool-list {
+				display: flex;
+				width: 100%;
+				flex-direction: column;
+				gap: 10px;
+			}
+
+			.tool-selector {
+				display: flex;
+				width: 100%;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.selected-tool {
+				background-color: grey;
+			}
+
+		/* END Tool box*/
+		.tool-color-picker{
+			margin-top: 60px;
+			text-align: center;
+		}
+
+	/* END Tool box container*/
+	.canvas{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background-color: gray;
+		color: cyan;
+		width: 100%;
+		height: 100%;
+	}
 
