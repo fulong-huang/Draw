@@ -1,24 +1,21 @@
-import { CanvasClass } from './display/canvas/canvas.tsx'
-import './manager.css'
+import { canvasInit, canvasCleanUp, canvasResize } from "./display/canvas/canvasFunction.tsx";
+import "./manager.css";
 
-export class ManagerClass {
-  canvas!: CanvasClass;
-  constructor() {
-  }
-
-  init() {
-    // this.canvas = new CanvasClass();
-  }
-
-  setCanvas(canvas: CanvasClass) {
-    this.canvas = canvas;
-  }
-
-  cleanUp() {
-    this.canvas.cleanUp();
-  }
-
+export function managerInit() {
+	canvasInit();
+	window.addEventListener('resize', handleResize);
+	handleResize()
 }
 
-export const MANAGER = new ManagerClass();
+
+export function managerCleanUp() {
+  canvasCleanUp();
+	window.removeEventListener('resize', handleResize);
+}
+
+function handleResize() {
+	const width = window.innerWidth;
+	const height = window.innerHeight;
+	canvasResize(width, height);
+}
 
