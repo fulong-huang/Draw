@@ -9,4 +9,26 @@
   overflow: hidden;
 }
 
+.background-white {
+  background-color: white;
+}
 
+.background-black {
+  background-color: black;
+}
+
+.background-green {
+  background-color: green;
+}
+
+.background-blue {
+  background-color: blue;
+}
+
+.background-red {
+  background-color: red;
+}
+
+.break-flex {
+  flex-basis: 100%;
+}

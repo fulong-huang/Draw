@@ -15,6 +15,8 @@ let canvasCtx!: CanvasRenderingContext2D;
 let canvasWidth: number = 0;
 let canvasHeight: number = 0;
 
+let strokeColor: string = "black";
+
 const canvasElements: Array<Shape> = [];
 let canvasIsMouseDown: boolean = false;
 // TODO: 
@@ -175,13 +177,13 @@ export function canvasHandleMouseDown(event: MouseEvent) {
   } else if (canvasMode == "Draw") {
     canvasSelectedShapeIdx = -1;
     if (canvasSelectedShape == Sketch) {
-      canvasCurrShape = new Sketch(mousePosX, mousePosY);
+      canvasCurrShape = new Sketch(mousePosX, mousePosY, strokeColor);
     } else if (canvasSelectedShape == Rectangle) {
-      canvasCurrShape = new Rectangle(mousePosX, mousePosY, 0, 0);
+      canvasCurrShape = new Rectangle(mousePosX, mousePosY, 0, 0, strokeColor);
     } else if (canvasSelectedShape == Line) {
-      canvasCurrShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY);
+      canvasCurrShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY, strokeColor);
     } else if (canvasSelectedShape == Circle) {
-      canvasCurrShape = new Circle(mousePosX, mousePosY, 0);
+      canvasCurrShape = new Circle(mousePosX, mousePosY, 0, strokeColor);
     }
   }
 }
@@ -291,6 +293,10 @@ function canvasDrawElements(elements: Shape[]) {
 
 export function canvasTest() {
   canvasSetSelectedTool("Pointer");
+}
+
+export function canvasSetColor(color: string) {
+  strokeColor = color;
 }
 
 

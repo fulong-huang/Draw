@@ -2,7 +2,7 @@ import Shape from './Shape.tsx'
 export default class Sketch extends Shape {
   color: string;
   points: number[];
-  constructor(x: number, y: number, points: number[] = [], lineWidth: number = 20, color: string = 'red') {
+  constructor(x: number, y: number, color: string = 'red', points: number[] = [], lineWidth: number = 20) {
     super(x, y);
     this.color = color;
     this.lineWidth = lineWidth;

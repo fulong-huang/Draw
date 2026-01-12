@@ -1,10 +1,11 @@
 import { canvasSetSelectedTool } from './canvasFunction.tsx';
 import ToolBox from './components/tool-box.tsx';
+import ColorPicker from './components/color-picker.tsx';
 import './canvas.css'
 
 export default function Canvas() {
 
-  const toolList = [
+  const toolList: ('Sketch' | 'Line' | 'Rectangle' | 'Circle' | 'Pointer')[] = [
     'Pointer',
     'Sketch',
     'Line',
@@ -37,10 +38,8 @@ export default function Canvas() {
               toolList={toolList}
               onToolSelect={canvasSetSelectedTool}
             />
-
-            <div className='tool-color-picker'>
-              color picker
-            </div>
+            <ColorPicker
+            />
           </div>
         </div>
 

@@ -4,7 +4,7 @@ export default class Line extends Shape {
   y2: number
   color: string;
   constructor(x: number, y: number, x2: number, y2: number,
-    lineWidth: number = 5, color = 'white') {
+    color = 'white', lineWidth: number = 5) {
     super(x, y);
     this.x2 = x2;
     this.y2 = y2;
