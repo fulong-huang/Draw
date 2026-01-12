@@ -196,7 +196,7 @@ export function canvasHandleMouseUp(event: MouseEvent) {
     if (!canvasMouseMoved) {
       canvasIsMovingShape = false;
       canvasSelectedShapeIdx = -1;
-      for (let i = 0; i < canvasElements.length; i++) {
+      for (let i = canvasElements.length - 1; i >= 0; i--) {
         if (canvasElements[i].isClicked(mousePosX, mousePosY)) {
           canvasSelectedShapeIdx = i;
           break;
@@ -209,7 +209,7 @@ export function canvasHandleMouseUp(event: MouseEvent) {
   } else if (canvasMode == "Draw") {
     if (canvasCurrShape && canvasCurrShape.exist()) {
       canvasElements.push(canvasCurrShape);
-      canvasCurrShape = null;
+      // canvasCurrShape = null;
     } else {
       // TODO:
       // displace image
