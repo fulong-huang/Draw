@@ -1,6 +1,7 @@
 import { canvasSetSelectedTool } from './canvasFunction.tsx';
 import ToolBox from './components/tool-box.tsx';
 import ColorPicker from './components/color-picker.tsx';
+import StrokePicker from './components/stroke-picker.tsx';
 import './canvas.css'
 
 export default function Canvas() {
@@ -39,6 +40,8 @@ export default function Canvas() {
               onToolSelect={canvasSetSelectedTool}
             />
             <ColorPicker
+            />
+            <StrokePicker
             />
           </div>
         </div>
