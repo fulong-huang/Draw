@@ -15,7 +15,8 @@ let canvasCtx!: CanvasRenderingContext2D;
 let canvasWidth: number = 0;
 let canvasHeight: number = 0;
 
-let strokeColor: string = "black";
+let strokeColor: string = "white";
+let strokeWidth: number = 5;
 
 const canvasElements: Array<Shape> = [];
 let canvasIsMouseDown: boolean = false;
@@ -177,13 +178,13 @@ export function canvasHandleMouseDown(event: MouseEvent) {
   } else if (canvasMode == "Draw") {
     canvasSelectedShapeIdx = -1;
     if (canvasSelectedShape == Sketch) {
-      canvasCurrShape = new Sketch(mousePosX, mousePosY, strokeColor);
+      canvasCurrShape = new Sketch(mousePosX, mousePosY, strokeColor, [], strokeWidth);
     } else if (canvasSelectedShape == Rectangle) {
-      canvasCurrShape = new Rectangle(mousePosX, mousePosY, 0, 0, strokeColor);
+      canvasCurrShape = new Rectangle(mousePosX, mousePosY, 0, 0, strokeColor, strokeWidth);
     } else if (canvasSelectedShape == Line) {
-      canvasCurrShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY, strokeColor);
+      canvasCurrShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY, strokeColor, strokeWidth);
     } else if (canvasSelectedShape == Circle) {
-      canvasCurrShape = new Circle(mousePosX, mousePosY, 0, strokeColor);
+      canvasCurrShape = new Circle(mousePosX, mousePosY, 0, strokeColor, strokeWidth);
     }
   }
 }
@@ -295,8 +296,11 @@ export function canvasTest() {
   canvasSetSelectedTool("Pointer");
 }
 
-export function canvasSetColor(color: string) {
+export function canvasSetStrokeColor(color: string) {
   strokeColor = color;
+}
+export function canvasSetStrokeWidth(width: number) {
+  strokeWidth = width;
 }
 
 

@@ -3,13 +3,11 @@ export default class Rectangle extends Shape {
   width: number;
   height: number;
   color: string;
-  stroke: boolean;
-  constructor(x: number, y: number, width = 50, height = 20, color = 'black', stroke = true, lineWidth = 1) {
+  constructor(x: number, y: number, width = 50, height = 20, color = 'black', lineWidth = 1) {
     super(x, y);
     this.width = width;
     this.height = height;
     this.color = color;
-    this.stroke = stroke;
     this.lineWidth = lineWidth;
 
     this.bounds = {
@@ -84,15 +82,16 @@ export default class Rectangle extends Shape {
     const y = (this.y - shiftedAmount[1]) * scale;
     const width = this.width * scale;
     const height = this.height * scale;
-    if (this.stroke) {
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = this.lineWidth * scale;
-      ctx.strokeRect(x, y, width, height);
-    }
-    else {
+    ctx.strokeStyle = this.color;
+    ctx.lineWidth = this.lineWidth * scale;
+    ctx.strokeRect(x, y, width, height);
+
+
+    /*
+      create fill rectangle
       ctx.fillStyle = this.color;
       ctx.fillRect(x, y, width, height);
-    }
+    */
   }
 };
 

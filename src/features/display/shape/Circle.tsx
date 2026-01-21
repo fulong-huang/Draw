@@ -2,12 +2,10 @@ import Shape from './Shape.tsx'
 export default class Circle extends Shape {
   radius: number;
   color: string;
-  stroke: boolean;
-  constructor(x: number, y: number, radius = 50, color = 'black', stroke = true, lineWidth = 1) {
+  constructor(x: number, y: number, radius = 50, color = 'black', lineWidth = 1) {
     super(x, y);
     this.radius = radius;
     this.color = color;
-    this.stroke = stroke;
     this.lineWidth = lineWidth;
 
     // TODO:
@@ -46,16 +44,16 @@ export default class Circle extends Shape {
     const x = (this.x - shiftedAmount[0]) * scale;
     const y = (this.y - shiftedAmount[1]) * scale;
     ctx.beginPath();
+
     ctx.arc(x, y, this.radius * scale, 0, 2 * Math.PI);
-    if (this.stroke) {
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = this.lineWidth * scale;
-      ctx.stroke();
-    }
-    else {
+    ctx.strokeStyle = this.color;
+    ctx.lineWidth = this.lineWidth * scale;
+    ctx.stroke();
+    /*
+      for filling circle
       ctx.fillStyle = this.color;
       ctx.fill();
-    }
+    */
   }
 };
 
