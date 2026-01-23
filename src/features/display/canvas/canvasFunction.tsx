@@ -4,6 +4,9 @@ import Circle from "../shape/Circle.tsx";
 import Line from "../shape/Line.tsx";
 import Sketch from "../shape/Sketch.tsx";
 
+import { addHistory, redoHistory, undoHistory, EditHistoryCreateShape, EditHistoryMoveShape, EditHistoryRemoveShape } from "./editHistory.tsx";
+let selectedElementPosition: [number, number] = [0, 0];
+
 const canvasScaleAmount: number = 1.1;
 let canvasCurrScale: number = 1;
 let canvasShiftedAmount: [number, number] = [0, 0];
@@ -18,12 +21,10 @@ let canvasHeight: number = 0;
 let strokeColor: string = "white";
 let strokeWidth: number = 5;
 
-const canvasElements: Array<Shape> = [];
+export const canvasElements: Array<Shape> = [];
 let canvasIsMouseDown: boolean = false;
-// TODO: 
-const canvasBackTrack = 0;
 let canvasMouseMoved: boolean = false;
-let canvasCurrShape: Sketch | Line | Rectangle | Circle;
+let canvasCurrShape: Sketch | Line | Rectangle | Circle | null;
 let canvasSelectedShapeIdx: number = -1;
 let canvasIsMovingShape: boolean = false;
 let canvasMovementOffset: [number, number] = [0, 0];
@@ -75,12 +76,27 @@ export function canvasHandleKeydown(event: KeyboardEvent) {
     case "Backspace":
     case "Delete": {
       if (canvasSelectedShapeIdx >= 0) {
-        canvasElements.splice(canvasSelectedShapeIdx, 1);
-        canvasSelectedShapeIdx = -1;
-        canvasUpdateCanvas();
+        const newHistory = new EditHistoryRemoveShape(canvasElements[canvasSelectedShapeIdx]);
+        newHistory.perform();
+        addHistory(newHistory);
+        //         canvasElements.splice(canvasSelectedShapeIdx, 1);
+        //         canvasSelectedShapeIdx = -1;
+        //         canvasUpdateCanvas();
       }
       break;
     }
+    case "z":
+      canvasSelectedShapeIdx = -1;
+      undoHistory();
+      console.log("Z");
+      canvasUpdateCanvas();
+      break;
+    case "r":
+      canvasSelectedShapeIdx = -1;
+      redoHistory();
+      canvasUpdateCanvas();
+      console.log("R");
+      break;
   }
 }
 
@@ -97,9 +113,7 @@ export function canvasResize(width: number, height: number) {
 
 export function canvasUpdateCanvas() {
   canvasClear();
-  canvasDrawElements(
-    canvasElements.slice(0, canvasElements.length - canvasBackTrack),
-  );
+  canvasDrawElements(canvasElements);
   if (canvasCurrShape) canvasDraw(canvasCurrShape);
   if (canvasSelectedShapeIdx >= 0) {
     canvasElements[canvasSelectedShapeIdx].drawBoundingBox(
@@ -202,17 +216,28 @@ export function canvasHandleMouseUp(event: MouseEvent) {
       for (let i = canvasElements.length - 1; i >= 0; i--) {
         if (canvasElements[i].isClicked(mousePosX, mousePosY)) {
           canvasSelectedShapeIdx = i;
+          selectedElementPosition = canvasElements[canvasSelectedShapeIdx].getPosition();
           break;
         }
       }
     } else {
-      // TODO:
-      // move image
+      const newHistory = new EditHistoryMoveShape(
+        canvasElements[canvasSelectedShapeIdx],
+        selectedElementPosition,
+        [mousePosX, mousePosY],
+        canvasMovementOffset
+      );
+      newHistory.perform();
+      addHistory(newHistory);
+      canvasUpdateCanvas();
     }
   } else if (canvasMode == "Draw") {
     if (canvasCurrShape && canvasCurrShape.exist()) {
-      canvasElements.push(canvasCurrShape);
-      // canvasCurrShape = null;
+      const newHistory = new EditHistoryCreateShape(canvasCurrShape);
+      newHistory.perform();
+      addHistory(newHistory);
+      canvasCurrShape = null;
+      // canvasElements.push(canvasCurrShape);
     } else {
       // TODO:
       // displace image
