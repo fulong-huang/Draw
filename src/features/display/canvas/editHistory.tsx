@@ -50,8 +50,6 @@ export class EditHistoryCreateShape extends EditHistory {
   }
   undo() {
     canvasElements.splice(canvasElements.indexOf(this.shape), 1);
-    console.log("REMOVE ELEMENT");
-    console.log(canvasElements);
   }
 }
 
@@ -76,7 +74,6 @@ export class EditHistoryMoveShape extends EditHistory {
   }
   perform() {
     this.shape.moveTo(this.to[0], this.to[1], this.offset);
-    console.log("MOVE SHAPE");
   }
   undo() {
     this.shape.moveTo(this.from[0], this.from[1]);
