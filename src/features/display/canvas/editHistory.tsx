@@ -47,8 +47,6 @@ export class EditHistory {
 export class EditHistoryCreateShape extends EditHistory {
   perform() {
     canvasElements.push(this.shape);
-    console.log("ADDING ELEMENT");
-    console.log(canvasElements);
   }
   undo() {
     canvasElements.splice(canvasElements.indexOf(this.shape), 1);

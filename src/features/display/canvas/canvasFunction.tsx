@@ -70,7 +70,7 @@ export function canvasInit() {
   canvasResize(width, height);
 }
 
-export function canvasHandleKeydown(event: KeyboardEvent) {
+function canvasHandleKeydown(event: KeyboardEvent) {
   const key = event.key;
   switch (key) {
     case "Backspace":
@@ -88,14 +88,12 @@ export function canvasHandleKeydown(event: KeyboardEvent) {
     case "z":
       canvasSelectedShapeIdx = -1;
       undoHistory();
-      console.log("Z");
       canvasUpdateCanvas();
       break;
     case "r":
       canvasSelectedShapeIdx = -1;
       redoHistory();
       canvasUpdateCanvas();
-      console.log("R");
       break;
   }
 }
@@ -134,7 +132,7 @@ export function canvasGetActualCoordinate(x: number, y: number): [number, number
   return [x, y];
 }
 
-export function canvasHandleMouseMovement(event: MouseEvent) {
+function canvasHandleMouseMovement(event: MouseEvent) {
   if (!canvasIsMouseDown) return;
   canvasMouseMoved = true;
   const [mousePosX, mousePosY] = canvasGetActualCoordinate(
@@ -168,7 +166,7 @@ export function canvasHandleMouseMovement(event: MouseEvent) {
   }
   canvasUpdateCanvas();
 }
-export function canvasHandleMouseDown(event: MouseEvent) {
+function canvasHandleMouseDown(event: MouseEvent) {
   if (canvasIsMouseDown) return;
 
   canvasIsMouseDown = true;
@@ -202,7 +200,7 @@ export function canvasHandleMouseDown(event: MouseEvent) {
     }
   }
 }
-export function canvasHandleMouseUp(event: MouseEvent) {
+function canvasHandleMouseUp(event: MouseEvent) {
   canvasIsMouseDown = false;
   const [mousePosX, mousePosY] = canvasGetActualCoordinate(
     event.offsetX,
@@ -220,7 +218,8 @@ export function canvasHandleMouseUp(event: MouseEvent) {
           break;
         }
       }
-    } else {
+    }
+    else if (canvasIsMovingShape) {
       const newHistory = new EditHistoryMoveShape(
         canvasElements[canvasSelectedShapeIdx],
         selectedElementPosition,
@@ -246,7 +245,7 @@ export function canvasHandleMouseUp(event: MouseEvent) {
   canvasUpdateCanvas();
 }
 
-export function canvasHandleWheelScroll(event: WheelEvent) {
+function canvasHandleWheelScroll(event: WheelEvent) {
   let scale: number;
   if (event.deltaY < 0) scale = canvasCurrScale * canvasScaleAmount;
   else scale = canvasCurrScale / canvasScaleAmount;
