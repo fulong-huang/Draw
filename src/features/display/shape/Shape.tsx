@@ -27,7 +27,7 @@ export default class Shape {
     ctx.setLineDash([8 + this.flip])
 
     ctx.strokeStyle = 'blue';
-    ctx.lineWidth = 2 * scale;
+    ctx.lineWidth = 2;
     ctx.strokeRect(x, y, width, height);
     ctx.setLineDash([0])
   }

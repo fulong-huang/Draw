@@ -190,13 +190,13 @@ function canvasHandleMouseDown(event: MouseEvent) {
   } else if (canvasMode == "Draw") {
     canvasSelectedShapeIdx = -1;
     if (canvasSelectedShape == Sketch) {
-      canvasCurrShape = new Sketch(mousePosX, mousePosY, strokeColor, [], strokeWidth);
+      canvasCurrShape = new Sketch(mousePosX, mousePosY, strokeColor, [], strokeWidth / canvasCurrScale);
     } else if (canvasSelectedShape == Rectangle) {
-      canvasCurrShape = new Rectangle(mousePosX, mousePosY, 0, 0, strokeColor, strokeWidth);
+      canvasCurrShape = new Rectangle(mousePosX, mousePosY, 0, 0, strokeColor, strokeWidth / canvasCurrScale);
     } else if (canvasSelectedShape == Line) {
-      canvasCurrShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY, strokeColor, strokeWidth);
+      canvasCurrShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY, strokeColor, strokeWidth / canvasCurrScale);
     } else if (canvasSelectedShape == Circle) {
-      canvasCurrShape = new Circle(mousePosX, mousePosY, 0, strokeColor, strokeWidth);
+      canvasCurrShape = new Circle(mousePosX, mousePosY, 0, strokeColor, strokeWidth / canvasCurrScale);
     }
   }
 }
