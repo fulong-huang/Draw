@@ -1,4 +1,5 @@
-import { canvasSetSelectedTool } from './canvasFunction.tsx';
+import { canvasSetSelectedTool, canvasUpdateCanvas } from './canvasFunction.tsx';
+import { undoHistory, redoHistory } from './editHistory.tsx';
 import ToolBox from './components/tool-box.tsx';
 import ColorPicker from './components/color-picker.tsx';
 import StrokePicker from './components/stroke-picker.tsx';
@@ -48,6 +49,10 @@ export default function Canvas() {
 
         <canvas id='canvas' className='canvas'>
         </canvas>
+        <div className='canvas-history-button'>
+          <div onClick={() => { undoHistory(); canvasUpdateCanvas() }}>Undo</div>
+          <div onClick={() => { redoHistory(); canvasUpdateCanvas() }}>Redo</div>
+        </div>
       </div>
     </>
   )

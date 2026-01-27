@@ -44,3 +44,20 @@
   width: 100%;
   height: 100%;
 }
+
+.canvas-history-button {
+  position: absolute;
+  display: flex;
+  margin-left: 137px;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.canvas-history-button * {
+  background-color: bisque;
+  color: black;
+  padding: 2px 5px;
+  border-radius: 5px;
+  text-align: center;
+
+}
