@@ -17,6 +17,19 @@
   padding: 5px;
 }
 
+.stroke-picker>*:hover {
+  cursor: pointer;
+}
+
+.stroke-picker>*:hover {
+  outline: 2px auto blueviolet;
+}
+
+.stroke-picker>*:active {
+  background-color: blueviolet;
+}
+
+
 .stroke-picker-width-6 {
   width: 6px;
   height: 6px;

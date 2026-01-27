@@ -27,10 +27,17 @@
   width: 100%;
   align-items: center;
   justify-content: center;
+  padding: 2px 6px;
+}
+
+.tool-selector:hover {
+  cursor: pointer;
+  outline: 2px auto aliceblue;
 }
 
 .selected-tool {
   background-color: grey;
+  outline: 2px auto aliceblue;
 }
 
 /* END Tool box*/
@@ -48,7 +55,7 @@
 .canvas-history-button {
   position: absolute;
   display: flex;
-  margin-left: 137px;
+  margin-left: 150px;
   gap: 5px;
   margin-top: 5px;
 }
@@ -59,5 +66,13 @@
   padding: 2px 5px;
   border-radius: 5px;
   text-align: center;
+}
 
+.canvas-history-button *:hover {
+  background-color: beige;
+  cursor: pointer;
+}
+
+.canvas-history-button *:active {
+  outline: 2px auto aliceblue;
 }

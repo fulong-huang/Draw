@@ -15,6 +15,15 @@
   height: 45px;
 }
 
+.color-picker>*:hover {
+  outline: 3px solid gray;
+  cursor: pointer;
+}
+
+.color-picker>*:active {
+  outline-color: darkgray;
+}
+
 .color-picker>span {
   width: 0;
   height: 0;
