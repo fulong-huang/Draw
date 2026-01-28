@@ -79,6 +79,7 @@ function canvasHandleKeydown(event: KeyboardEvent) {
         const newHistory = new EditHistoryRemoveShape(canvasElements[canvasSelectedShapeIdx]);
         newHistory.perform();
         addHistory(newHistory);
+        canvasUpdateCanvas();
         //         canvasElements.splice(canvasSelectedShapeIdx, 1);
         //         canvasSelectedShapeIdx = -1;
         //         canvasUpdateCanvas();
