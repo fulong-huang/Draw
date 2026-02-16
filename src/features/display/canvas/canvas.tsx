@@ -1,17 +1,12 @@
-import { canvasElements, canvasSetSelectedTool, canvasUpdateCanvas } from './canvasFunction.tsx';
+import { canvasSetSelectedTool, canvasUpdateCanvas } from './canvasFunction.tsx';
 import { undoHistory, redoHistory } from './editHistory.tsx';
 import ToolBox from './components/tool-box.tsx';
 import ColorPicker from './components/color-picker.tsx';
 import StrokePicker from './components/stroke-picker.tsx';
-import Text from '../shape/Text.tsx';
 import './canvas.css'
 
 export default function Canvas() {
 	
-	const text = new Text(100, 100, 'new text');
-	canvasElements.push(text);
-
-
   const toolList: ('Sketch' | 'Line' | 'Rectangle' | 'Circle' | 'Pointer' | 'Text')[] = [
     'Pointer',
     'Sketch',

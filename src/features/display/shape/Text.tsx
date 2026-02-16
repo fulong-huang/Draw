@@ -9,6 +9,7 @@ export default class Text extends Shape {
 		this.font_size= font;
     this.color = color;
 
+		// Will be replaced right after constructor by explicting calling resize font;
     this.bounds = {
       x1: x, y1: y,
       x2: x, y2: y,
