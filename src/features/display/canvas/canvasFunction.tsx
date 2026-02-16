@@ -3,6 +3,7 @@ import Rectangle from "../shape/Rectangle.tsx";
 import Circle from "../shape/Circle.tsx";
 import Line from "../shape/Line.tsx";
 import Sketch from "../shape/Sketch.tsx";
+import Text from "../shape/Text.tsx";
 
 import { addHistory, redoHistory, undoHistory, EditHistoryCreateShape, EditHistoryMoveShape, EditHistoryRemoveShape } from "./editHistory.tsx";
 let selectedElementPosition: [number, number] = [0, 0];
@@ -10,6 +11,8 @@ let selectedElementPosition: [number, number] = [0, 0];
 const canvasScaleAmount: number = 1.1;
 let canvasCurrScale: number = 1;
 let canvasShiftedAmount: [number, number] = [0, 0];
+
+let editingText = false;
 
 let CANVAS!: HTMLCanvasElement;
 // = document.getElementById("canvas")! as HTMLCanvasElement;
@@ -24,7 +27,7 @@ let strokeWidth: number = 5;
 export const canvasElements: Array<Shape> = [];
 let canvasIsMouseDown: boolean = false;
 let canvasMouseMoved: boolean = false;
-let canvasCurrShape: Sketch | Line | Rectangle | Circle | null;
+let canvasCurrShape: Sketch | Line | Rectangle | Circle | Text | null;
 let canvasSelectedShapeIdx: number = -1;
 let canvasIsMovingShape: boolean = false;
 let canvasMovementOffset: [number, number] = [0, 0];
@@ -32,6 +35,7 @@ let canvasSelectedShape:
   | typeof Sketch
   | typeof Rectangle
   | typeof Line
+  | typeof Text
   | typeof Circle = Sketch;
 
 let canvasMode: "Pointer" | "Draw" = "Draw";
@@ -72,6 +76,16 @@ export function canvasInit() {
 
 function canvasHandleKeydown(event: KeyboardEvent) {
   const key = event.key;
+	if(canvasSelectedShape == Text && editingText){
+		if(key == "Backspace"){
+			canvasCurrShape.removeChar(canvasCtx, canvasCurrScale);
+		}
+		else{
+			canvasCurrShape.addChar(canvasCtx, key, canvasCurrScale);
+		}
+		canvasUpdateCanvas();
+		return;
+	}
   switch (key) {
     case "Backspace":
     case "Delete": {
@@ -186,7 +200,6 @@ function canvasHandleMouseDown(event: MouseEvent) {
       canvasCalculateMovementOffset(mousePosX, mousePosY);
     } else {
       canvasIsMovingShape = false;
-      //
     }
   } else if (canvasMode == "Draw") {
     canvasSelectedShapeIdx = -1;
@@ -198,6 +211,8 @@ function canvasHandleMouseDown(event: MouseEvent) {
       canvasCurrShape = new Line(mousePosX, mousePosY, mousePosX, mousePosY, strokeColor, strokeWidth / canvasCurrScale);
     } else if (canvasSelectedShape == Circle) {
       canvasCurrShape = new Circle(mousePosX, mousePosY, 0, strokeColor, strokeWidth / canvasCurrScale);
+    } else if (canvasSelectedShape == Text) {
+      canvasCurrShape = new Text(mousePosX, mousePosY, 'created');
     }
   }
 }
@@ -209,6 +224,7 @@ function canvasHandleMouseUp(event: MouseEvent) {
   );
 
   if (canvasMode == "Pointer") {
+		editingText = false;
     if (!canvasMouseMoved) {
       canvasIsMovingShape = false;
       canvasSelectedShapeIdx = -1;
@@ -232,7 +248,16 @@ function canvasHandleMouseUp(event: MouseEvent) {
       canvasUpdateCanvas();
     }
   } else if (canvasMode == "Draw") {
-    if (canvasCurrShape && canvasCurrShape.exist()) {
+    if (canvasSelectedShape == Text) {
+      const newHistory = new EditHistoryCreateShape(canvasCurrShape);
+      newHistory.perform();
+      addHistory(newHistory);
+			editingText = true;
+			canvasSelectedShapeIdx = canvasElements.length;
+			canvasElements.push(canvasCurrShape);
+		}
+    else if (canvasCurrShape && canvasCurrShape.exist()) {
+			editingText = false;
       const newHistory = new EditHistoryCreateShape(canvasCurrShape);
       newHistory.perform();
       addHistory(newHistory);
@@ -253,7 +278,7 @@ function canvasHandleWheelScroll(event: WheelEvent) {
   canvasZoom(event.offsetX, event.offsetY, scale);
 }
 export function canvasSetSelectedTool(
-  toolSelected: "Sketch" | "Line" | "Rectangle" | "Circle" | "Pointer",
+  toolSelected: "Sketch" | "Line" | "Rectangle" | "Circle" | "Pointer" | "Text",
 ) {
   canvasMode = "Draw";
   if (toolSelected == "Sketch") {
@@ -264,6 +289,8 @@ export function canvasSetSelectedTool(
     canvasSelectedShape = Rectangle;
   } else if (toolSelected == "Circle") {
     canvasSelectedShape = Circle;
+  } else if (toolSelected == "Text") {
+    canvasSelectedShape = Text;
   } else if (toolSelected == "Pointer") {
     canvasMode = "Pointer";
     canvasSelectedShape = Rectangle;

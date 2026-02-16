@@ -1,7 +1,7 @@
 import { useState } from 'react'
 type toolBoxProps = {
-  toolList: ('Sketch' | 'Line' | 'Rectangle' | 'Circle' | 'Pointer')[],
-  onToolSelect: (item: 'Sketch' | 'Line' | 'Rectangle' | 'Circle' | 'Pointer') => void,
+  toolList: ('Sketch' | 'Line' | 'Rectangle' | 'Circle' | 'Pointer' | 'Text')[],
+  onToolSelect: (item: 'Sketch' | 'Line' | 'Rectangle' | 'Circle' | 'Pointer' | 'Text') => void,
 }
 
 export default function ToolBox(props: toolBoxProps) {
