@@ -3,6 +3,7 @@ export default class Rectangle extends Shape {
   width: number;
   height: number;
   color: string;
+	lineWidth: number;
   constructor(x: number, y: number, width = 50, height = 20, color = 'black', lineWidth = 1) {
     super(x, y);
     this.width = width;

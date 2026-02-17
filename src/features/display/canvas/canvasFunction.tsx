@@ -76,16 +76,22 @@ export function canvasInit() {
 
 function canvasHandleKeydown(event: KeyboardEvent) {
   const key = event.key;
-	if(canvasSelectedShape == Text && editingText){
-		if(key == "Backspace"){
-			canvasCurrShape.removeChar(canvasCtx, canvasCurrScale);
-		}
-		else{
-			canvasCurrShape.addChar(canvasCtx, key, canvasCurrScale);
-		}
-		canvasUpdateCanvas();
-		return;
-	}
+  if (key == "Escape") {
+    canvasCurrShape = null
+    canvasSelectedShapeIdx = -1;
+    canvasUpdateCanvas();
+    return;
+  }
+  if (canvasCurrShape instanceof Text && editingText) {
+    if (key == "Backspace") {
+      canvasCurrShape.removeChar(canvasCtx, canvasCurrScale);
+    }
+    else {
+      canvasCurrShape.addChar(canvasCtx, key, canvasCurrScale);
+    }
+    canvasUpdateCanvas();
+    return;
+  }
   switch (key) {
     case "Backspace":
     case "Delete": {
@@ -213,7 +219,7 @@ function canvasHandleMouseDown(event: MouseEvent) {
       canvasCurrShape = new Circle(mousePosX, mousePosY, 0, strokeColor, strokeWidth / canvasCurrScale);
     } else if (canvasSelectedShape == Text) {
       canvasCurrShape = new Text(mousePosX, mousePosY, '');
-			canvasCurrShape.resizeFont(canvasGetContext(), canvasCurrScale);
+      canvasCurrShape.resizeFont(canvasGetContext(), canvasCurrScale);
     }
   }
 }
@@ -225,7 +231,7 @@ function canvasHandleMouseUp(event: MouseEvent) {
   );
 
   if (canvasMode == "Pointer") {
-		editingText = false;
+    editingText = false;
     if (!canvasMouseMoved) {
       canvasIsMovingShape = false;
       canvasSelectedShapeIdx = -1;
@@ -253,12 +259,12 @@ function canvasHandleMouseUp(event: MouseEvent) {
       const newHistory = new EditHistoryCreateShape(canvasCurrShape);
       newHistory.perform();
       addHistory(newHistory);
-			editingText = true;
-			canvasSelectedShapeIdx = canvasElements.length;
-			canvasElements.push(canvasCurrShape);
-		}
+      editingText = true;
+      canvasSelectedShapeIdx = canvasElements.length;
+      canvasElements.push(canvasCurrShape);
+    }
     else if (canvasCurrShape && canvasCurrShape.exist()) {
-			editingText = false;
+      editingText = false;
       const newHistory = new EditHistoryCreateShape(canvasCurrShape);
       newHistory.perform();
       addHistory(newHistory);
