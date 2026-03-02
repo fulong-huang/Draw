@@ -143,11 +143,16 @@ export function canvasUpdateCanvas() {
     }
   }
   if (canvasSelectedShapeIdx >= 0) {
-    canvasElements[canvasSelectedShapeIdx].drawBoundingBox(
-      canvasCtx,
-      canvasShiftedAmount,
-      canvasCurrScale,
-    );
+    if (canvasSelectedShapeIdx >= canvasElements.length) {
+      canvasSelectedShapeIdx = -1;
+    }
+    else {
+      canvasElements[canvasSelectedShapeIdx].drawBoundingBox(
+        canvasCtx,
+        canvasShiftedAmount,
+        canvasCurrScale,
+      );
+    }
   }
 }
 
