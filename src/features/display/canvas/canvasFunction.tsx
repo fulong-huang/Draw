@@ -232,7 +232,7 @@ function canvasHandleMouseDown(event: MouseEvent) {
         newHistory.perform();
         addHistory(newHistory);
       }
-      canvasCurrShape = new Text(mousePosX, mousePosY, '', strokeColor);
+      canvasCurrShape = new Text(mousePosX, mousePosY, '', strokeColor, strokeWidth / canvasCurrScale * 5);
       canvasCurrShape.resizeFont(canvasGetContext(), canvasCurrScale);
     }
   }
