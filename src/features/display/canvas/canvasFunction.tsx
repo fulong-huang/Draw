@@ -257,6 +257,10 @@ function canvasHandleMouseUp(event: MouseEvent) {
     }
   } else if (canvasMode == "Draw") {
     if (canvasSelectedShape == Text) {
+      if (canvasCurrShape == null) {
+        console.error("Canvas selected shape does not match with actual shape");
+        return;
+      }
       const newHistory = new EditHistoryCreateShape(canvasCurrShape);
       newHistory.perform();
       addHistory(newHistory);

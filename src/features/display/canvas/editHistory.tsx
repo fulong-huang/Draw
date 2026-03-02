@@ -32,7 +32,11 @@ export function redoHistory() {
 
 export class EditHistory {
   shape!: Shape;
-  constructor(shape: Shape) {
+  constructor(shape: Shape | null) {
+    if (shape == null) {
+      console.error("Edit History required pointer to an existing shape")
+      return;
+    }
     this.shape = shape;
   }
 
