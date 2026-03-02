@@ -77,8 +77,6 @@ export function canvasInit() {
 function canvasHandleKeydown(event: KeyboardEvent) {
   const key = event.key;
   if (key == "Escape") {
-    canvasCurrShape = null
-    canvasSelectedShapeIdx = -1;
     canvasSetSelectedTool("Pointer");
     canvasUpdateCanvas();
     return;
@@ -134,7 +132,16 @@ export function canvasResize(width: number, height: number) {
 export function canvasUpdateCanvas() {
   canvasClear();
   canvasDrawElements(canvasElements);
-  if (canvasCurrShape) canvasDraw(canvasCurrShape);
+  if (canvasCurrShape) {
+    canvasDraw(canvasCurrShape);
+    if (editingText) {
+      canvasCurrShape.drawBoundingBox(
+        canvasCtx,
+        canvasShiftedAmount,
+        canvasCurrScale,
+      )
+    }
+  }
   if (canvasSelectedShapeIdx >= 0) {
     canvasElements[canvasSelectedShapeIdx].drawBoundingBox(
       canvasCtx,
@@ -219,6 +226,12 @@ function canvasHandleMouseDown(event: MouseEvent) {
     } else if (canvasSelectedShape == Circle) {
       canvasCurrShape = new Circle(mousePosX, mousePosY, 0, strokeColor, strokeWidth / canvasCurrScale);
     } else if (canvasSelectedShape == Text) {
+      if (editingText && canvasCurrShape && canvasCurrShape.exist()) {
+        editingText = false;
+        const newHistory = new EditHistoryCreateShape(canvasCurrShape);
+        newHistory.perform();
+        addHistory(newHistory);
+      }
       canvasCurrShape = new Text(mousePosX, mousePosY, '', strokeColor);
       canvasCurrShape.resizeFont(canvasGetContext(), canvasCurrScale);
     }
@@ -261,12 +274,7 @@ function canvasHandleMouseUp(event: MouseEvent) {
         console.error("Canvas selected shape does not match with actual shape");
         return;
       }
-      const newHistory = new EditHistoryCreateShape(canvasCurrShape);
-      newHistory.perform();
-      addHistory(newHistory);
       editingText = true;
-      canvasSelectedShapeIdx = canvasElements.length;
-      canvasElements.push(canvasCurrShape);
     }
     else if (canvasCurrShape && canvasCurrShape.exist()) {
       editingText = false;
@@ -292,24 +300,35 @@ function canvasHandleWheelScroll(event: WheelEvent) {
 export function canvasSetSelectedTool(
   toolSelected: "Sketch" | "Line" | "Rectangle" | "Circle" | "Pointer" | "Text",
 ) {
+  canvasSelectedShapeIdx = -1;
   canvasMode = "Draw";
+  editingText = false;
+  if (toolSelected == "Text") {
+    canvasSelectedShape = Text;
+  }
+  else if (canvasSelectedShape == Text && canvasCurrShape != null && canvasCurrShape.exist()) {
+    const newHistory = new EditHistoryCreateShape(canvasCurrShape);
+    newHistory.perform();
+    addHistory(newHistory);
+  }
   if (toolSelected == "Sketch") {
+    canvasCurrShape = null;
     canvasSelectedShape = Sketch;
   } else if (toolSelected == "Line") {
+    canvasCurrShape = null;
     canvasSelectedShape = Line;
   } else if (toolSelected == "Rectangle") {
+    canvasCurrShape = null;
     canvasSelectedShape = Rectangle;
   } else if (toolSelected == "Circle") {
+    canvasCurrShape = null;
     canvasSelectedShape = Circle;
-  } else if (toolSelected == "Text") {
-    canvasSelectedShape = Text;
   } else if (toolSelected == "Pointer") {
+    canvasCurrShape = null;
     canvasMode = "Pointer";
     canvasSelectedShape = Rectangle;
-  } else {
-    // TODO:
-    // User not drawing
   }
+  canvasUpdateCanvas();
 }
 
 export function canvasGetCurrSclae() {
