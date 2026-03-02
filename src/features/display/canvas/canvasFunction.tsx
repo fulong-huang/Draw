@@ -219,7 +219,7 @@ function canvasHandleMouseDown(event: MouseEvent) {
     } else if (canvasSelectedShape == Circle) {
       canvasCurrShape = new Circle(mousePosX, mousePosY, 0, strokeColor, strokeWidth / canvasCurrScale);
     } else if (canvasSelectedShape == Text) {
-      canvasCurrShape = new Text(mousePosX, mousePosY, '');
+      canvasCurrShape = new Text(mousePosX, mousePosY, '', strokeColor);
       canvasCurrShape.resizeFont(canvasGetContext(), canvasCurrScale);
     }
   }
