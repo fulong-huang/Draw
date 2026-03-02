@@ -6,14 +6,14 @@ import StrokePicker from './components/stroke-picker.tsx';
 import './canvas.css'
 
 export default function Canvas() {
-	
+
   const toolList: ('Sketch' | 'Line' | 'Rectangle' | 'Circle' | 'Pointer' | 'Text')[] = [
     'Pointer',
     'Sketch',
     'Line',
     'Circle',
     'Rectangle',
-		'Text',
+    'Text',
   ]
 
   // @ts-expect-error varuable only used during testing
@@ -51,8 +51,8 @@ export default function Canvas() {
         <canvas id='canvas' className='canvas'>
         </canvas>
         <div className='canvas-history-button'>
-          <div onClick={() => { undoHistory(); canvasUpdateCanvas() }}>Undo</div>
-          <div onClick={() => { redoHistory(); canvasUpdateCanvas() }}>Redo</div>
+          <div onClick={() => { undoHistory(); canvasUpdateCanvas() }}>Undo <u>[Z]</u></div>
+          <div onClick={() => { redoHistory(); canvasUpdateCanvas() }}>Redo <u>[R]</u></div>
         </div>
       </div>
     </>

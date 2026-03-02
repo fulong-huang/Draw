@@ -79,6 +79,7 @@ function canvasHandleKeydown(event: KeyboardEvent) {
   if (key == "Escape") {
     canvasCurrShape = null
     canvasSelectedShapeIdx = -1;
+    canvasSetSelectedTool("Pointer");
     canvasUpdateCanvas();
     return;
   }
